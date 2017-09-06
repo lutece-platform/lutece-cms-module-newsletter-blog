@@ -56,25 +56,7 @@ public interface INewsletterHtmlDocDAO
      */
     void createDocumentTopic( NewsletterHtmlDoc topic, Plugin plugin );
 
-    /**
-     * Select the list of htmldocs published since the last sending of the newsletter
-     * 
-     * @return a list of htmldocs
-     * @param nTagId
-     *            The id of the category
-     * @param dateLastSending
-     *            the date of the last newsletter sending
-     * @param plugin
-     *            the htmldocs Plugin
-     */
-    Collection<HtmlDoc> selectDocumentsByDateAndTag( int nTagId, Timestamp dateLastSending, Plugin plugin );
-
-    /**
-     * Returns the list of the portlets which are htmldocs portlets
-     * 
-     * @return the list in form of a Collection object
-     */
-    ReferenceList selectDocumentListPortlets( );
+  
 
     /**
      * Associate a new category to a newsletter topic

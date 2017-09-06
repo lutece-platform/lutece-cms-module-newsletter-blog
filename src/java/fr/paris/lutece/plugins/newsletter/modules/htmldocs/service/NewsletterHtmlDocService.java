@@ -3,6 +3,7 @@ package fr.paris.lutece.plugins.newsletter.modules.htmldocs.service;
 import fr.paris.lutece.plugins.htmldocs.business.HtmlDoc;
 import fr.paris.lutece.plugins.htmldocs.business.HtmlDocFilter;
 import fr.paris.lutece.plugins.htmldocs.business.HtmlDocHome;
+import fr.paris.lutece.plugins.htmldocs.business.portlet.HtmlDocsListPortletHome;
 import fr.paris.lutece.plugins.htmldocs.service.HtmldocsPlugin;
 import fr.paris.lutece.plugins.htmldocs.service.PublishingService;
 import fr.paris.lutece.plugins.newsletter.modules.htmldocs.business.NewsletterHtmlDoc;
@@ -13,6 +14,7 @@ import fr.paris.lutece.plugins.newsletter.service.NewsletterService;
 import fr.paris.lutece.plugins.newsletter.util.NewsLetterConstants;
 import fr.paris.lutece.plugins.newsletter.util.NewsletterUtils;
 import fr.paris.lutece.portal.business.portlet.Portlet;
+import fr.paris.lutece.portal.business.portlet.PortletTypeHome;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
@@ -20,6 +22,7 @@ import fr.paris.lutece.portal.service.portlet.PortletService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPathService;
+import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
 
@@ -150,7 +153,7 @@ public class NewsletterHtmlDocService
             int [ ] arrayTagIds = NewsletterHtmlDocHome.findNewsletterTagIds( newsletterDocument.getId( ), pluginNewsLetter );
             if ( arrayTagIds != null && arrayTagIds.length > 0 )
             {
-                documentFilter.setCategoriesId( arrayTagIds );
+                documentFilter.setTagsId( arrayTagIds );
             }
             listDocuments = PublishingService.getInstance( ).getPublishedDocumentsSinceDate( datePublishing, datePublishing, documentFilter, locale );
         }
@@ -250,5 +253,25 @@ public class NewsletterHtmlDocService
             return template.getHtml( );
         }
         return StringUtils.EMPTY;
+    }
+    /**
+     * Load the portlet of type HTMLDOC_LIST
+     * @return
+     */
+    public ReferenceList getPortletHtmlDocList(){
+    	
+    	ReferenceList list= new ReferenceList();
+    	String className = HtmlDocsListPortletHome.class.getName( );
+        String strPortletTypeId = PortletTypeHome.getPortletTypeId( className );
+        
+    	for(Portlet pt:PublishingService.getInstance().getHtmlDocsPortlets()){
+    		
+    		if(pt.getPortletTypeId().equals(strPortletTypeId)){
+    			list.addItem(pt.getId( ), pt.getName( ));
+    		}
+    		
+    	}
+    	return list;
+    	
     }
 }

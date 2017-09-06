@@ -34,10 +34,10 @@
 package fr.paris.lutece.plugins.newsletter.modules.htmldocs.web;
 
 import fr.paris.lutece.plugins.htmldocs.business.HtmlDoc;
+import fr.paris.lutece.plugins.htmldocs.business.HtmlDocFilter;
 import fr.paris.lutece.plugins.htmldocs.service.HtmlDocService;
-import fr.paris.lutece.plugins.htmldocs.service.HtmldocsPlugin;
+import fr.paris.lutece.plugins.htmldocs.service.PublishingService;
 import fr.paris.lutece.plugins.newsletter.business.NewsLetterTemplateHome;
-import fr.paris.lutece.plugins.newsletter.modules.htmldocs.business.NewsletterHtmlDocHome;
 import fr.paris.lutece.plugins.newsletter.modules.htmldocs.service.NewsletterHtmlDocService;
 import fr.paris.lutece.plugins.newsletter.modules.htmldocs.service.NewsletterHtmlDocTopicService;
 import fr.paris.lutece.plugins.newsletter.modules.htmldocs.util.NewsletterHtmlDocUtils;
@@ -124,7 +124,6 @@ public class NewsletterDocumentServiceJspBean extends InsertServiceJspBean imple
     @Override
     public String getInsertServiceSelectorUI( HttpServletRequest request )
     {
-        Plugin pluginDocument = PluginService.getPlugin( HtmldocsPlugin.PLUGIN_NAME );
         Plugin pluginNewsletter = PluginService.getPlugin( NewsletterPlugin.PLUGIN_NAME );
 
         Locale locale = AdminUserService.getLocale( request );
@@ -147,7 +146,7 @@ public class NewsletterDocumentServiceJspBean extends InsertServiceJspBean imple
 
         // Criteria
         // Combo of available document list portlets
-        ReferenceList listDocumentPortlets = NewsletterHtmlDocHome.getHtmlDocListPortlets( pluginDocument );
+        ReferenceList listDocumentPortlets = NewsletterHtmlDocService.getInstance().getPortletHtmlDocList();
         ReferenceItem refItem = new ReferenceItem( );
         refItem.setCode( CONSTANT_STRING_ZERO );
         refItem.setName( I18nService.getLocalizedString( LABEL_FRAGMENT_COMBO_ALL_DOCUMENT_LIST_ITEM, locale ) );
@@ -158,7 +157,10 @@ public class NewsletterDocumentServiceJspBean extends InsertServiceJspBean imple
         model.put( BOOKMARK_START_PUBLISHED_DATE, strPublishedDate );
 
         // Document list
-        Collection<HtmlDoc> list = NewsletterHtmlDocHome.findDocumentsByDateAndTag( nDocumentTagId, publishedDate, pluginDocument );
+        HtmlDocFilter documentFilter = new HtmlDocFilter();
+        int tableauEntier[] = {nDocumentTagId};
+        documentFilter.setTagsId(tableauEntier);
+        Collection<HtmlDoc> list = PublishingService.getInstance().getPublishedDocumentsSinceDate(publishedDate, publishedDate, documentFilter, locale);
         model.put( MARK_DOCUMENT_LIST, list );
 
         ReferenceList templateList = NewsLetterTemplateHome.getTemplatesListByType( NewsletterHtmlDocTopicService.NEWSLETTER_DOCUMENT_TOPIC_TYPE,

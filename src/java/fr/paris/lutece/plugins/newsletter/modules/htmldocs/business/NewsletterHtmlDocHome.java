@@ -1,6 +1,5 @@
 package fr.paris.lutece.plugins.newsletter.modules.htmldocs.business;
 
-import fr.paris.lutece.plugins.htmldocs.business.HtmlDoc;
 import fr.paris.lutece.plugins.htmldocs.business.Tag;
 import fr.paris.lutece.plugins.htmldocs.service.PublishingService;
 import fr.paris.lutece.plugins.htmldocs.service.TagService;
@@ -9,7 +8,6 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceList;
 
-import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -81,21 +79,6 @@ public final class NewsletterHtmlDocHome
         _dao.createDocumentTopic( topic, plugin );
     }
 
-    /**
-     * Returns the list of htmldocs published by date and by topic
-     * 
-     * @param nDocumentTagId
-     *            the id of the tag
-     * @param dtDernierEnvoi
-     *            the date of the last sending
-     * @param plugin
-     *            The plugin
-     * @return a collection of htmldocs
-     */
-    public static Collection<HtmlDoc> findDocumentsByDateAndTag( int nDocumentTagId, Timestamp dtDernierEnvoi, Plugin plugin )
-    {
-        return _dao.selectDocumentsByDateAndTag( nDocumentTagId, dtDernierEnvoi, plugin );
-    }
 
     /**
      * Fetches all the tags defined
@@ -117,18 +100,7 @@ public final class NewsletterHtmlDocHome
         return list;
     }
 
-    /**
-     * Returns the collection of any portlet containing at least a published htmldocs
-     * 
-     * @param plugin
-     *            The plugin
-     * @return the portlets list
-     */
-    public static ReferenceList getHtmlDocListPortlets( Plugin plugin )
-    {
-        return _dao.selectDocumentListPortlets( );
-    }
-
+    
     /**
      * Associate a htmldocs category to a newsletter topic
      * 

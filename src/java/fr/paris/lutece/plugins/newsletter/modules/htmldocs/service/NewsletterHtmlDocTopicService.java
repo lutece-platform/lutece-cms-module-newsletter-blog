@@ -1,6 +1,9 @@
 package fr.paris.lutece.plugins.newsletter.modules.htmldocs.service;
 
+import fr.paris.lutece.plugins.htmldocs.business.portlet.HtmlDocsListPortletHome;
+import fr.paris.lutece.plugins.htmldocs.business.portlet.HtmldocsPortletHome;
 import fr.paris.lutece.plugins.htmldocs.service.HtmldocsPlugin;
+import fr.paris.lutece.plugins.htmldocs.service.PublishingService;
 import fr.paris.lutece.plugins.newsletter.business.NewsLetter;
 import fr.paris.lutece.plugins.newsletter.business.NewsLetterHome;
 import fr.paris.lutece.plugins.newsletter.business.NewsLetterTemplate;
@@ -12,6 +15,8 @@ import fr.paris.lutece.plugins.newsletter.service.NewsletterPlugin;
 import fr.paris.lutece.plugins.newsletter.service.NewsletterService;
 import fr.paris.lutece.plugins.newsletter.service.topic.INewsletterTopicService;
 import fr.paris.lutece.plugins.newsletter.util.NewsletterUtils;
+import fr.paris.lutece.portal.business.portlet.Portlet;
+import fr.paris.lutece.portal.business.portlet.PortletTypeHome;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
@@ -37,6 +42,7 @@ public class NewsletterHtmlDocTopicService implements INewsletterTopicService
      * Newsletter document topic type
      */
     public static final String NEWSLETTER_DOCUMENT_TOPIC_TYPE = "NEWSLETTER_HTMLDOC";
+    private static final String HTMLDOCSLIST_PORTLET = "HTMLDOCSLIST_PORTLET";
 
     // PARAMETERS
     private static final String PARAMETER_CATEGORY_LIST_ID = "category_list_id";
@@ -118,7 +124,7 @@ public class NewsletterHtmlDocTopicService implements INewsletterTopicService
         listCategoryList.checkItems( strSelectedCategoryList );
 
         // We get the list of document list portlets containing published documents
-        ReferenceList listDocumentPortlets = NewsletterHtmlDocHome.getHtmlDocListPortlets( getDocumentPlugin( ) );
+        ReferenceList listDocumentPortlets = NewsletterHtmlDocService.getInstance().getPortletHtmlDocList( );
         int [ ] arrayPortletIds = NewsletterHtmlDocHome.findNewsletterPortletsIds( newsletterTopic.getId( ), getNewsletterDocumentPlugin( ) );
         String [ ] strSelectedPortlets = new String [ arrayPortletIds.length];
 
@@ -286,13 +292,7 @@ public class NewsletterHtmlDocTopicService implements INewsletterTopicService
         return _newsletterPlugin;
     }
 
-    /**
-     * Get the document plugin
-     * 
-     * @return The document plugin
-     */
-    private Plugin getDocumentPlugin( )
-    {
-        return PluginService.getPlugin( HtmldocsPlugin.PLUGIN_NAME );
-    }
+   
+    
+   
 }
