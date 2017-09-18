@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
-
-<beans>
-	<bean id="newsletter-htmldocs.newsletterHtmlDocDAO" class="fr.paris.lutece.plugins.newsletter.modules.htmldocs.business.NewsletterHtmlDocDAO" />
-	
-	<bean id="newsletter-htmldocs.newsHtmlDocTopicService" class="fr.paris.lutece.plugins.newsletter.modules.htmldocs.service.NewsletterHtmlDocTopicService" />
-</beans>

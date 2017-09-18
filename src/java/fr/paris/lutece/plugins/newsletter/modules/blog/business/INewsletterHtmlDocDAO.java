@@ -1,13 +1,7 @@
-package fr.paris.lutece.plugins.newsletter.modules.htmldocs.business;
+package fr.paris.lutece.plugins.newsletter.modules.blog.business;
 
-import fr.paris.lutece.plugins.htmldocs.business.HtmlDoc;
 import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.util.ReferenceList;
 
-import java.sql.Timestamp;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Interface for INewsletterHtmlDocDAO

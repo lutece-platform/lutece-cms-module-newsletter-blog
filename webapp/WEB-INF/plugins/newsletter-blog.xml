@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?><plug-in>
+    
+    <!-- Plugin Informations -->
+    <name>newsletter-blog</name>
+    <class>fr.paris.lutece.plugins.newsletter.modules.blog.service.NewsletterHtmlDocPlugin</class>
+    <version>1.0.0-SNAPSHOT</version>
+    <description>module.newsletter.blog.module.description</description>
+    <documentation/>
+    <installation/>
+    <changes/>
+    <user-guide/>
+    <provider>module.newsletter.blog.module.provider</provider>
+    <provider-url>http://lutece.paris.fr</provider-url>
+    <icon-url>images/admin/skin/plugins/newsletter/modules/blog/newsletter-document.png</icon-url>
+    <copyright>Copyright 2001-2016 Mairie de Paris</copyright>
+    <core-version-dependency>
+		<min-core-version>4.1.0</min-core-version>
+		<max-core-version/>	
+    </core-version-dependency>
+    <db-pool-required>1</db-pool-required>
+    
+    <!-- Insert Service -->
+    <insert-services>
+        <insert-service>
+            <insert-service-id>document_selection_hs</insert-service-id>
+            <insert-service-name>module.newsletter.blog.insertService.name</insert-service-name>
+            <insert-service-bean-class>fr.paris.lutece.plugins.newsletter.modules.blog.web.NewsletterDocumentServiceJspBean</insert-service-bean-class>
+            <insert-service-label>module.newsletter.blog.insertService.label</insert-service-label>
+        </insert-service>
+    </insert-services>
+    
+</plug-in>

@@ -1,8 +1,8 @@
-package fr.paris.lutece.plugins.newsletter.modules.htmldocs.business;
+package fr.paris.lutece.plugins.newsletter.modules.blog.business;
 
-import fr.paris.lutece.plugins.htmldocs.business.Tag;
-import fr.paris.lutece.plugins.htmldocs.service.PublishingService;
-import fr.paris.lutece.plugins.htmldocs.service.TagService;
+import fr.paris.lutece.plugins.blog.business.Tag;
+import fr.paris.lutece.plugins.blog.service.PublishingService;
+import fr.paris.lutece.plugins.blog.service.TagService;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -17,7 +17,7 @@ import java.util.List;
  */
 public final class NewsletterHtmlDocHome
 {
-    private static INewsletterHtmlDocDAO _dao = SpringContextService.getBean( "newsletter-htmldocs.newsletterHtmlDocDAO" );
+    private static INewsletterHtmlDocDAO _dao = SpringContextService.getBean( "newsletter-blog.newsletterHtmlDocDAO" );
 
     /**
      * Private constructor

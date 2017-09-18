@@ -31,9 +31,9 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.newsletter.modules.htmldocs.service;
+package fr.paris.lutece.plugins.newsletter.modules.blog.service;
 
-import fr.paris.lutece.plugins.newsletter.modules.htmldocs.business.NewsletterHtmlDocTemplateRemovalListener;
+import fr.paris.lutece.plugins.newsletter.modules.blog.business.NewsletterHtmlDocTemplateRemovalListener;
 import fr.paris.lutece.plugins.newsletter.service.NewsletterTemplateRemovalService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
@@ -45,7 +45,7 @@ public class NewsletterHtmlDocPlugin extends Plugin
     /**
      * Name of the plugin
      */
-    public static final String PLUGIN_NAME = "newsletter-htmldocs";
+    public static final String PLUGIN_NAME = "newsletter-blog";
 
     /**
      * {@inheritDoc}

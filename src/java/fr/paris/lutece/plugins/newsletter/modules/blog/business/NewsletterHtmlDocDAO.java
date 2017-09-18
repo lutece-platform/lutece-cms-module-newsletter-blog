@@ -1,4 +1,4 @@
-package fr.paris.lutece.plugins.newsletter.modules.htmldocs.business;
+package fr.paris.lutece.plugins.newsletter.modules.blog.business;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;

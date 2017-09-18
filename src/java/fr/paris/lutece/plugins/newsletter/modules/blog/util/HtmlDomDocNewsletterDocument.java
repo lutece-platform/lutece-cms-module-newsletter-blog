@@ -1,8 +1,8 @@
-package fr.paris.lutece.plugins.newsletter.modules.htmldocs.util;
+package fr.paris.lutece.plugins.newsletter.modules.blog.util;
 
-import fr.paris.lutece.plugins.htmldocs.business.HtmlDoc;
-import fr.paris.lutece.plugins.htmldocs.service.HtmlDocService;
-import fr.paris.lutece.plugins.newsletter.modules.htmldocs.service.NewsletterHtmlDocService;
+import fr.paris.lutece.plugins.blog.business.HtmlDoc;
+import fr.paris.lutece.plugins.blog.service.HtmlDocService;
+import fr.paris.lutece.plugins.newsletter.modules.blog.service.NewsletterHtmlDocService;
 import fr.paris.lutece.plugins.newsletter.util.HtmlDomDocNewsletter;
 import fr.paris.lutece.plugins.newsletter.util.NewsLetterConstants;
 

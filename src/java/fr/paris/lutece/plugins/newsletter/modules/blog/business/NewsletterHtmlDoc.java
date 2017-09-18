@@ -1,4 +1,4 @@
-package fr.paris.lutece.plugins.newsletter.modules.htmldocs.business;
+package fr.paris.lutece.plugins.newsletter.modules.blog.business;
 
 /**
  * Newsletter htmldocs topic class

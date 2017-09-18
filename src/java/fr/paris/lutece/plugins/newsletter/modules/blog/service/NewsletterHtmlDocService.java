@@ -1,14 +1,14 @@
-package fr.paris.lutece.plugins.newsletter.modules.htmldocs.service;
+package fr.paris.lutece.plugins.newsletter.modules.blog.service;
 
-import fr.paris.lutece.plugins.htmldocs.business.HtmlDoc;
-import fr.paris.lutece.plugins.htmldocs.business.HtmlDocFilter;
-import fr.paris.lutece.plugins.htmldocs.business.HtmlDocHome;
-import fr.paris.lutece.plugins.htmldocs.business.portlet.HtmlDocsListPortletHome;
-import fr.paris.lutece.plugins.htmldocs.service.HtmldocsPlugin;
-import fr.paris.lutece.plugins.htmldocs.service.PublishingService;
-import fr.paris.lutece.plugins.newsletter.modules.htmldocs.business.NewsletterHtmlDoc;
-import fr.paris.lutece.plugins.newsletter.modules.htmldocs.business.NewsletterHtmlDocHome;
-import fr.paris.lutece.plugins.newsletter.modules.htmldocs.util.NewsletterHtmlDocUtils;
+import fr.paris.lutece.plugins.blog.business.HtmlDoc;
+import fr.paris.lutece.plugins.blog.business.HtmlDocFilter;
+import fr.paris.lutece.plugins.blog.business.HtmlDocHome;
+import fr.paris.lutece.plugins.blog.business.portlet.HtmlDocsListPortletHome;
+import fr.paris.lutece.plugins.blog.service.HtmldocsPlugin;
+import fr.paris.lutece.plugins.blog.service.PublishingService;
+import fr.paris.lutece.plugins.newsletter.modules.blog.business.NewsletterHtmlDoc;
+import fr.paris.lutece.plugins.newsletter.modules.blog.business.NewsletterHtmlDocHome;
+import fr.paris.lutece.plugins.newsletter.modules.blog.util.NewsletterHtmlDocUtils;
 import fr.paris.lutece.plugins.newsletter.service.NewsletterPlugin;
 import fr.paris.lutece.plugins.newsletter.service.NewsletterService;
 import fr.paris.lutece.plugins.newsletter.util.NewsLetterConstants;
@@ -51,7 +51,7 @@ public class NewsletterHtmlDocService
     private static final String MARK_DOCUMENT = "document";
     private static final String MARK_FILE_ID = "id_file";
 
-    private static final String DOCUMENT_RESOURCE_SERVLET_URL = "servlet/plugins/htmldocs/file";
+    private static final String DOCUMENT_RESOURCE_SERVLET_URL = "servlet/plugins/blog/file";
 
     private static NewsletterHtmlDocService _singleton = new NewsletterHtmlDocService( );
     private NewsletterService _newsletterService = NewsletterService.getService( );

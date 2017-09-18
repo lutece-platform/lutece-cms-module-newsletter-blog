@@ -31,16 +31,16 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.newsletter.modules.htmldocs.web;
+package fr.paris.lutece.plugins.newsletter.modules.blog.web;
 
-import fr.paris.lutece.plugins.htmldocs.business.HtmlDoc;
-import fr.paris.lutece.plugins.htmldocs.business.HtmlDocFilter;
-import fr.paris.lutece.plugins.htmldocs.service.HtmlDocService;
-import fr.paris.lutece.plugins.htmldocs.service.PublishingService;
+import fr.paris.lutece.plugins.blog.business.HtmlDoc;
+import fr.paris.lutece.plugins.blog.business.HtmlDocFilter;
+import fr.paris.lutece.plugins.blog.service.HtmlDocService;
+import fr.paris.lutece.plugins.blog.service.PublishingService;
 import fr.paris.lutece.plugins.newsletter.business.NewsLetterTemplateHome;
-import fr.paris.lutece.plugins.newsletter.modules.htmldocs.service.NewsletterHtmlDocService;
-import fr.paris.lutece.plugins.newsletter.modules.htmldocs.service.NewsletterHtmlDocTopicService;
-import fr.paris.lutece.plugins.newsletter.modules.htmldocs.util.NewsletterHtmlDocUtils;
+import fr.paris.lutece.plugins.newsletter.modules.blog.service.NewsletterHtmlDocService;
+import fr.paris.lutece.plugins.newsletter.modules.blog.service.NewsletterHtmlDocTopicService;
+import fr.paris.lutece.plugins.newsletter.modules.blog.util.NewsletterHtmlDocUtils;
 import fr.paris.lutece.plugins.newsletter.service.NewsletterPlugin;
 import fr.paris.lutece.plugins.newsletter.service.NewsletterService;
 import fr.paris.lutece.plugins.newsletter.util.NewsLetterConstants;
@@ -88,8 +88,8 @@ public class NewsletterDocumentServiceJspBean extends InsertServiceJspBean imple
     private static final long serialVersionUID = -4095074358460689539L;
 
     // templates
-    private static final String TEMPLATE_SELECT_DOCUMENTS = "admin/plugins/newsletter/modules/htmldocs/select_htmldocs.html";
-    private static final String TEMPLATE_INSERT_DOCEMENTS = "admin/plugins/newsletter/modules/htmldocs/insert_htmldocs.html";
+    private static final String TEMPLATE_SELECT_DOCUMENTS = "admin/plugins/newsletter/modules/blog/select_htmldocs.html";
+    private static final String TEMPLATE_INSERT_DOCEMENTS = "admin/plugins/newsletter/modules/blog/insert_htmldocs.html";
 
     // bookmarks
     private static final String BOOKMARK_START_PUBLISHED_DATE = "start_published_date";
@@ -107,9 +107,9 @@ public class NewsletterDocumentServiceJspBean extends InsertServiceJspBean imple
     private static final String PARAMETER_INPUT = "input";
 
     // property
-    private static final String LABEL_FRAGMENT_COMBO_ALL_DOCUMENT_LIST_ITEM = "module.newsletter.htmldocs.documents.selection.lists.all";
-    private static final String MESSAGE_NO_DOCUMENT_TEMPLATE = "module.newsletter.htmldocs.message.noDocumentTemplate";
-    private static final String MESSAGE_NO_DOCUMENT_CHOSEN = "module.newsletter.htmldocs.message.noDocumentChosen";
+    private static final String LABEL_FRAGMENT_COMBO_ALL_DOCUMENT_LIST_ITEM = "module.newsletter.blog.documents.selection.lists.all";
+    private static final String MESSAGE_NO_DOCUMENT_TEMPLATE = "module.newsletter.blog.message.noDocumentTemplate";
+    private static final String MESSAGE_NO_DOCUMENT_CHOSEN = "module.newsletter.blog.message.noDocumentChosen";
 
     private static final String CONSTANT_STRING_ZERO = "0";
     private NewsletterService _newsletterService = NewsletterService.getService( );

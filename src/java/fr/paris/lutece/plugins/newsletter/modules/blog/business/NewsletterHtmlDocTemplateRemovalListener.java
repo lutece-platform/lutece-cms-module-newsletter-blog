@@ -1,4 +1,4 @@
-package fr.paris.lutece.plugins.newsletter.modules.htmldocs.business;
+package fr.paris.lutece.plugins.newsletter.modules.blog.business;
 
 import fr.paris.lutece.plugins.newsletter.service.NewsletterPlugin;
 import fr.paris.lutece.portal.service.i18n.I18nService;
@@ -12,7 +12,7 @@ import java.util.Locale;
  */
 public class NewsletterHtmlDocTemplateRemovalListener implements RemovalListener
 {
-    private static final String MESSAGE_TEMPLATE_USED_BY_NEWSLETTER = "module.newsletter.htmldocs.message.templateUsedByDocumentTopic";
+    private static final String MESSAGE_TEMPLATE_USED_BY_NEWSLETTER = "module.newsletter.blog.message.templateUsedByDocumentTopic";
 
     /**
      * {@inheritDoc}

@@ -1,22 +1,17 @@
-package fr.paris.lutece.plugins.newsletter.modules.htmldocs.service;
+package fr.paris.lutece.plugins.newsletter.modules.blog.service;
 
-import fr.paris.lutece.plugins.htmldocs.business.portlet.HtmlDocsListPortletHome;
-import fr.paris.lutece.plugins.htmldocs.business.portlet.HtmldocsPortletHome;
-import fr.paris.lutece.plugins.htmldocs.service.HtmldocsPlugin;
-import fr.paris.lutece.plugins.htmldocs.service.PublishingService;
+
 import fr.paris.lutece.plugins.newsletter.business.NewsLetter;
 import fr.paris.lutece.plugins.newsletter.business.NewsLetterHome;
 import fr.paris.lutece.plugins.newsletter.business.NewsLetterTemplate;
 import fr.paris.lutece.plugins.newsletter.business.NewsLetterTemplateHome;
 import fr.paris.lutece.plugins.newsletter.business.topic.NewsletterTopic;
-import fr.paris.lutece.plugins.newsletter.modules.htmldocs.business.NewsletterHtmlDoc;
-import fr.paris.lutece.plugins.newsletter.modules.htmldocs.business.NewsletterHtmlDocHome;
+import fr.paris.lutece.plugins.newsletter.modules.blog.business.NewsletterHtmlDoc;
+import fr.paris.lutece.plugins.newsletter.modules.blog.business.NewsletterHtmlDocHome;
 import fr.paris.lutece.plugins.newsletter.service.NewsletterPlugin;
 import fr.paris.lutece.plugins.newsletter.service.NewsletterService;
 import fr.paris.lutece.plugins.newsletter.service.topic.INewsletterTopicService;
 import fr.paris.lutece.plugins.newsletter.util.NewsletterUtils;
-import fr.paris.lutece.portal.business.portlet.Portlet;
-import fr.paris.lutece.portal.business.portlet.PortletTypeHome;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
@@ -53,8 +48,8 @@ public class NewsletterHtmlDocTopicService implements INewsletterTopicService
     private static final String CONSTANT_UNCATEGORIZED_DOCUMENTS_KEY = "-1";
 
     // MESSAGES AND LABELS
-    private static final String LABEL_MODIFY_UNCATEGORIZED_DOCUMENTS = "module.newsletter.htmldocs.modify_document_topic.uncategorizedDocuments.label";
-    private static final String MESSAGE_NEWSLETTER_DOCUMENT_TOPIC_TYPE_NAME = "module.newsletter.htmldocs.topicType.name";
+    private static final String LABEL_MODIFY_UNCATEGORIZED_DOCUMENTS = "module.newsletter.blog.modify_document_topic.uncategorizedDocuments.label";
+    private static final String MESSAGE_NEWSLETTER_DOCUMENT_TOPIC_TYPE_NAME = "module.newsletter.blog.topicType.name";
 
     // MARKS
     private static final String MARK_CATEGORY_LIST = "category_list";
@@ -65,7 +60,7 @@ public class NewsletterHtmlDocTopicService implements INewsletterTopicService
     private static final String MARK_USE_CATEGORIES = "use_categories";
 
     // TEMPLATES
-    private static final String TEMPLATE_MODIFY_NEWSLETTER_DOCUMENT_TOPIC_CONFIG = "admin/plugins/newsletter/modules/htmldocs/modify_newsletter_htmldocs_topic_config.html";
+    private static final String TEMPLATE_MODIFY_NEWSLETTER_DOCUMENT_TOPIC_CONFIG = "admin/plugins/newsletter/modules/blog/modify_newsletter_htmldocs_topic_config.html";
 
     private Plugin _newsletterDocumentPlugin;
     private Plugin _newsletterPlugin;

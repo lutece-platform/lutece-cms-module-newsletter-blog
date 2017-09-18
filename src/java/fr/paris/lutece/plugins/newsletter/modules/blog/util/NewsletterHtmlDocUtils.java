@@ -1,4 +1,4 @@
-package fr.paris.lutece.plugins.newsletter.modules.htmldocs.util;
+package fr.paris.lutece.plugins.newsletter.modules.blog.util;
 
 import org.apache.commons.lang.StringUtils;
 
