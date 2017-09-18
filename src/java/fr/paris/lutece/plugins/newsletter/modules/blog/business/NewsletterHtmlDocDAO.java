@@ -24,7 +24,6 @@ public class NewsletterHtmlDocDAO implements INewsletterHtmlDocDAO
     private static final String SQL_QUERY_DELETE_NEWSLETTER_PORTLET = "DELETE FROM newsletter_htmldocs_portlet WHERE id_topic = ?";
     private static final String SQL_QUERY_FIND_TEMPLATE = " SELECT count(id_template) FROM newsletter_htmldocs_portlet WHERE id_template = ? ";
 
-
     /**
      * {@inheritDoc}
      */
@@ -85,9 +84,6 @@ public class NewsletterHtmlDocDAO implements INewsletterHtmlDocDAO
         daoUtil.executeUpdate( );
         daoUtil.free( );
     }
-
-   
-  
 
     /**
      * {@inheritDoc}

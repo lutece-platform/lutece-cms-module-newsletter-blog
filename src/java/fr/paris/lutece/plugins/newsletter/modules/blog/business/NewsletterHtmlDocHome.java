@@ -79,7 +79,6 @@ public final class NewsletterHtmlDocHome
         _dao.createDocumentTopic( topic, plugin );
     }
 
-
     /**
      * Fetches all the tags defined
      * 
@@ -100,7 +99,6 @@ public final class NewsletterHtmlDocHome
         return list;
     }
 
-    
     /**
      * Associate a htmldocs category to a newsletter topic
      * 

@@ -2,7 +2,6 @@ package fr.paris.lutece.plugins.newsletter.modules.blog.business;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
-
 /**
  * Interface for INewsletterHtmlDocDAO
  */
@@ -49,8 +48,6 @@ public interface INewsletterHtmlDocDAO
      *            the plugin
      */
     void createDocumentTopic( NewsletterHtmlDoc topic, Plugin plugin );
-
-  
 
     /**
      * Associate a new category to a newsletter topic

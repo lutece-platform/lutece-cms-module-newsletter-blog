@@ -254,24 +254,29 @@ public class NewsletterHtmlDocService
         }
         return StringUtils.EMPTY;
     }
+
     /**
      * Load the portlet of type HTMLDOC_LIST
+     * 
      * @return
      */
-    public ReferenceList getPortletHtmlDocList(){
-    	
-    	ReferenceList list= new ReferenceList();
-    	String className = HtmlDocsListPortletHome.class.getName( );
+    public ReferenceList getPortletHtmlDocList( )
+    {
+
+        ReferenceList list = new ReferenceList( );
+        String className = HtmlDocsListPortletHome.class.getName( );
         String strPortletTypeId = PortletTypeHome.getPortletTypeId( className );
-        
-    	for(Portlet pt:PublishingService.getInstance().getHtmlDocsPortlets()){
-    		
-    		if(pt.getPortletTypeId().equals(strPortletTypeId)){
-    			list.addItem(pt.getId( ), pt.getName( ));
-    		}
-    		
-    	}
-    	return list;
-    	
+
+        for ( Portlet pt : PublishingService.getInstance( ).getHtmlDocsPortlets( ) )
+        {
+
+            if ( pt.getPortletTypeId( ).equals( strPortletTypeId ) )
+            {
+                list.addItem( pt.getId( ), pt.getName( ) );
+            }
+
+        }
+        return list;
+
     }
 }

@@ -1,6 +1,5 @@
 package fr.paris.lutece.plugins.newsletter.modules.blog.service;
 
-
 import fr.paris.lutece.plugins.newsletter.business.NewsLetter;
 import fr.paris.lutece.plugins.newsletter.business.NewsLetterHome;
 import fr.paris.lutece.plugins.newsletter.business.NewsLetterTemplate;
@@ -119,7 +118,7 @@ public class NewsletterHtmlDocTopicService implements INewsletterTopicService
         listCategoryList.checkItems( strSelectedCategoryList );
 
         // We get the list of document list portlets containing published documents
-        ReferenceList listDocumentPortlets = NewsletterHtmlDocService.getInstance().getPortletHtmlDocList( );
+        ReferenceList listDocumentPortlets = NewsletterHtmlDocService.getInstance( ).getPortletHtmlDocList( );
         int [ ] arrayPortletIds = NewsletterHtmlDocHome.findNewsletterPortletsIds( newsletterTopic.getId( ), getNewsletterDocumentPlugin( ) );
         String [ ] strSelectedPortlets = new String [ arrayPortletIds.length];
 
@@ -287,7 +286,4 @@ public class NewsletterHtmlDocTopicService implements INewsletterTopicService
         return _newsletterPlugin;
     }
 
-   
-    
-   
 }

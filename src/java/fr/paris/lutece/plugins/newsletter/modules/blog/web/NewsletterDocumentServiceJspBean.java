@@ -146,7 +146,7 @@ public class NewsletterDocumentServiceJspBean extends InsertServiceJspBean imple
 
         // Criteria
         // Combo of available document list portlets
-        ReferenceList listDocumentPortlets = NewsletterHtmlDocService.getInstance().getPortletHtmlDocList();
+        ReferenceList listDocumentPortlets = NewsletterHtmlDocService.getInstance( ).getPortletHtmlDocList( );
         ReferenceItem refItem = new ReferenceItem( );
         refItem.setCode( CONSTANT_STRING_ZERO );
         refItem.setName( I18nService.getLocalizedString( LABEL_FRAGMENT_COMBO_ALL_DOCUMENT_LIST_ITEM, locale ) );
@@ -157,10 +157,12 @@ public class NewsletterDocumentServiceJspBean extends InsertServiceJspBean imple
         model.put( BOOKMARK_START_PUBLISHED_DATE, strPublishedDate );
 
         // Document list
-        HtmlDocFilter documentFilter = new HtmlDocFilter();
-        int tableauEntier[] = {nDocumentTagId};
-        documentFilter.setTagsId(tableauEntier);
-        Collection<HtmlDoc> list = PublishingService.getInstance().getPublishedDocumentsSinceDate(publishedDate, publishedDate, documentFilter, locale);
+        HtmlDocFilter documentFilter = new HtmlDocFilter( );
+        int tableauEntier [ ] = {
+            nDocumentTagId
+        };
+        documentFilter.setTagsId( tableauEntier );
+        Collection<HtmlDoc> list = PublishingService.getInstance( ).getPublishedDocumentsSinceDate( publishedDate, publishedDate, documentFilter, locale );
         model.put( MARK_DOCUMENT_LIST, list );
 
         ReferenceList templateList = NewsLetterTemplateHome.getTemplatesListByType( NewsletterHtmlDocTopicService.NEWSLETTER_DOCUMENT_TOPIC_TYPE,
