@@ -9,34 +9,34 @@ import java.util.List;
 /**
  * DAO implementation for newsletter document
  */
-public class NewsletterHtmlDocDAO implements INewsletterHtmlDocDAO
+public class NewsletterBlogDAO implements INewsletterBlogDAO
 {
-    private static final String SQL_QUERY_SELECT_NEWSLETTER_DOCUMENT_TOPIC = " SELECT id_topic, id_template, use_tags FROM newsletter_htmldocs_topic WHERE id_topic = ? ";
-    private static final String SQL_QUERY_INSERT_NEWSLETTER_DOCUMENT_TOPIC = " INSERT INTO newsletter_htmldocs_topic(id_topic, id_template, use_tags) VALUES (?,?,?) ";
-    private static final String SQL_QUERY_UPDATE_NEWSLETTER_DOCUMENT_TOPIC = " UPDATE newsletter_htmldocs_topic SET id_template = ?, use_tags = ? WHERE id_topic = ? ";
-    private static final String SQL_QUERY_DELETE_NEWSLETTER_DOCUMENT_TOPIC = " DELETE FROM newsletter_htmldocs_topic WHERE id_topic = ? ";
+    private static final String SQL_QUERY_SELECT_NEWSLETTER_DOCUMENT_TOPIC = " SELECT id_topic, id_template, use_tags FROM newsletter_blogs_topic WHERE id_topic = ? ";
+    private static final String SQL_QUERY_INSERT_NEWSLETTER_DOCUMENT_TOPIC = " INSERT INTO newsletter_blogs_topic(id_topic, id_template, use_tags) VALUES (?,?,?) ";
+    private static final String SQL_QUERY_UPDATE_NEWSLETTER_DOCUMENT_TOPIC = " UPDATE newsletter_blogs_topic SET id_template = ?, use_tags = ? WHERE id_topic = ? ";
+    private static final String SQL_QUERY_DELETE_NEWSLETTER_DOCUMENT_TOPIC = " DELETE FROM newsletter_blogs_topic WHERE id_topic = ? ";
 
-    private static final String SQL_QUERY_ASSOCIATE_NEWSLETTER_CATEGORY_LIST = "INSERT INTO newsletter_htmldocs_tag ( id_topic , id_tag ) VALUES ( ?, ? ) ";
-    private static final String SQL_QUERY_DELETE_NEWSLETTER_CATEGORY_LIST = "DELETE FROM newsletter_htmldocs_tag WHERE id_topic = ?";
-    private static final String SQL_QUERY_SELECT_NEWSLETTER_CATEGORY_IDS = "SELECT id_tag FROM newsletter_htmldocs_tag WHERE id_topic = ?";
-    private static final String SQL_QUERY_ASSOCIATE_NEWSLETTER_PORTLET = "INSERT INTO newsletter_htmldocs_portlet ( id_topic , id_portlet ) VALUES ( ?, ? ) ";
-    private static final String SQL_QUERY_SELECT_NEWSLETTER_PORTLET_IDS = " SELECT id_portlet FROM newsletter_htmldocs_portlet WHERE id_topic = ? ";
-    private static final String SQL_QUERY_DELETE_NEWSLETTER_PORTLET = "DELETE FROM newsletter_htmldocs_portlet WHERE id_topic = ?";
-    private static final String SQL_QUERY_FIND_TEMPLATE = " SELECT count(id_template) FROM newsletter_htmldocs_portlet WHERE id_template = ? ";
+    private static final String SQL_QUERY_ASSOCIATE_NEWSLETTER_CATEGORY_LIST = "INSERT INTO newsletter_blogs_tag ( id_topic , id_tag ) VALUES ( ?, ? ) ";
+    private static final String SQL_QUERY_DELETE_NEWSLETTER_CATEGORY_LIST = "DELETE FROM newsletter_blogs_tag WHERE id_topic = ?";
+    private static final String SQL_QUERY_SELECT_NEWSLETTER_CATEGORY_IDS = "SELECT id_tag FROM newsletter_blogs_tag WHERE id_topic = ?";
+    private static final String SQL_QUERY_ASSOCIATE_NEWSLETTER_PORTLET = "INSERT INTO newsletter_blogs_portlet ( id_topic , id_portlet ) VALUES ( ?, ? ) ";
+    private static final String SQL_QUERY_SELECT_NEWSLETTER_PORTLET_IDS = " SELECT id_portlet FROM newsletter_blogs_portlet WHERE id_topic = ? ";
+    private static final String SQL_QUERY_DELETE_NEWSLETTER_PORTLET = "DELETE FROM newsletter_blogs_portlet WHERE id_topic = ?";
+    private static final String SQL_QUERY_FIND_TEMPLATE = " SELECT count(id_template) FROM newsletter_blogs_portlet WHERE id_template = ? ";
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public NewsletterHtmlDoc findByPrimaryKey( int nIdTopic, Plugin plugin )
+    public NewsletterBlog findByPrimaryKey( int nIdTopic, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_NEWSLETTER_DOCUMENT_TOPIC, plugin );
         daoUtil.setInt( 1, nIdTopic );
         daoUtil.executeQuery( );
-        NewsletterHtmlDoc topic = null;
+        NewsletterBlog topic = null;
         if ( daoUtil.next( ) )
         {
-            topic = new NewsletterHtmlDoc( );
+            topic = new NewsletterBlog( );
             topic.setId( daoUtil.getInt( 1 ) );
             topic.setIdTemplate( daoUtil.getInt( 2 ) );
             topic.setUseDocumentTags( daoUtil.getBoolean( 3 ) );
@@ -49,7 +49,7 @@ public class NewsletterHtmlDocDAO implements INewsletterHtmlDocDAO
      * {@inheritDoc}
      */
     @Override
-    public void updateDocumentTopic( NewsletterHtmlDoc topic, Plugin plugin )
+    public void updateDocumentTopic( NewsletterBlog topic, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_NEWSLETTER_DOCUMENT_TOPIC, plugin );
         daoUtil.setInt( 1, topic.getIdTemplate( ) );
@@ -75,7 +75,7 @@ public class NewsletterHtmlDocDAO implements INewsletterHtmlDocDAO
      * {@inheritDoc}
      */
     @Override
-    public void createDocumentTopic( NewsletterHtmlDoc topic, Plugin plugin )
+    public void createDocumentTopic( NewsletterBlog topic, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_NEWSLETTER_DOCUMENT_TOPIC, plugin );
         daoUtil.setInt( 1, topic.getId( ) );

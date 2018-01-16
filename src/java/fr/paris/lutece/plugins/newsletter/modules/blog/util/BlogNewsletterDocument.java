@@ -1,8 +1,8 @@
 package fr.paris.lutece.plugins.newsletter.modules.blog.util;
 
-import fr.paris.lutece.plugins.blog.business.HtmlDoc;
-import fr.paris.lutece.plugins.blog.service.HtmlDocService;
-import fr.paris.lutece.plugins.newsletter.modules.blog.service.NewsletterHtmlDocService;
+import fr.paris.lutece.plugins.blog.business.Blog;
+import fr.paris.lutece.plugins.blog.service.BlogService;
+import fr.paris.lutece.plugins.newsletter.modules.blog.service.NewsletterBlogService;
 import fr.paris.lutece.plugins.newsletter.util.HtmlDomDocNewsletter;
 import fr.paris.lutece.plugins.newsletter.util.NewsLetterConstants;
 
@@ -14,24 +14,24 @@ import org.w3c.dom.NodeList;
 /**
  * Dom document parser for newsletter document.
  */
-public class HtmlDomDocNewsletterDocument extends HtmlDomDocNewsletter
+public class BlogNewsletterDocument extends HtmlDomDocNewsletter
 {
     private static final String CONSTANT_IMG = "img";
     private static final String CONSTANT_A = "a";
     private static final String CONSTANT_SUBSTRING_BEGIN = "document?id=";
     private static final String CONSTANT_SUBSTRING_END = "&";
 
-    private static NewsletterHtmlDocService _newsletterDocumentService = NewsletterHtmlDocService.getInstance( );
+    private static NewsletterBlogService _newsletterDocumentService = NewsletterBlogService.getInstance( );
 
     /**
-     * Instantiates an HtmlDocument after having built the DOM tree.
+     * Instantiates an Blogument after having built the DOM tree.
      * 
      * @param strHtml
      *            The Html code to be parsed.
      * @param strBaseUrl
      *            The Base url used to retrieve urls.
      */
-    public HtmlDomDocNewsletterDocument( String strHtml, String strBaseUrl )
+    public BlogNewsletterDocument( String strHtml, String strBaseUrl )
     {
         super( strHtml, strBaseUrl );
     }
@@ -77,13 +77,13 @@ public class HtmlDomDocNewsletterDocument extends HtmlDomDocNewsletter
                 if ( strSrc.contains( CONSTANT_SUBSTRING_BEGIN ) && !strSrc.contains( strUnsecuredBaseUrl + strUnsecuredFolder ) )
                 {
                     String strDocumentId = StringUtils.substringBetween( strSrc, CONSTANT_SUBSTRING_BEGIN, CONSTANT_SUBSTRING_END );
-                    HtmlDoc document = HtmlDocService.getInstance( ).findByPrimaryKeyWithoutBinaries( Integer.valueOf( strDocumentId ) );
+                    Blog document = BlogService.getInstance( ).findByPrimaryKeyWithoutBinaries( Integer.valueOf( strDocumentId ) );
 
                     String strFileName = StringUtils.EMPTY;
 
                     if ( elementType.getTagName( ).equals( CONSTANT_IMG ) )
                     {
-                        strFileName = _newsletterDocumentService.copyFileFromDocument( document, NewsletterHtmlDocUtils.CONSTANT_IMG_FILE_TYPE,
+                        strFileName = _newsletterDocumentService.copyFileFromDocument( document, NewsletterBlogUtils.CONSTANT_IMG_FILE_TYPE,
                                 strUnsecuredFolderPath + strUnsecuredFolder );
                     }
                     else

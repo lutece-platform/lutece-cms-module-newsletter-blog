@@ -2,7 +2,7 @@
     
     <!-- Plugin Informations -->
     <name>newsletter-blog</name>
-    <class>fr.paris.lutece.plugins.newsletter.modules.blog.service.NewsletterHtmlDocPlugin</class>
+    <class>fr.paris.lutece.plugins.newsletter.modules.blog.service.NewsletterBlogPlugin</class>
     <version>1.0.0-SNAPSHOT</version>
     <description>module.newsletter.blog.module.description</description>
     <documentation/>

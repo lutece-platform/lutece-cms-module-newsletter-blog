@@ -3,13 +3,13 @@ package fr.paris.lutece.plugins.newsletter.modules.blog.business;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
 /**
- * Interface for INewsletterHtmlDocDAO
+ * Interface for INewsletterblogDAO
  */
-public interface INewsletterHtmlDocDAO
+public interface INewsletterBlogDAO
 {
 
     /**
-     * Get a newsletter htmldocs topic from its id
+     * Get a newsletter blogs topic from its id
      * 
      * @param nIdTopic
      *            the id of the topic to get
@@ -17,37 +17,37 @@ public interface INewsletterHtmlDocDAO
      *            The plugin
      * @return The topic, or null if no topic was found
      */
-    NewsletterHtmlDoc findByPrimaryKey( int nIdTopic, Plugin plugin );
+    NewsletterBlog findByPrimaryKey( int nIdTopic, Plugin plugin );
 
     /**
-     * Update a newsletter htmldocs topic
+     * Update a newsletter blogs topic
      * 
      * @param topic
      *            The topic to update
      * @param plugin
      *            The plugin
      */
-    void updateDocumentTopic( NewsletterHtmlDoc topic, Plugin plugin );
+    void updateDocumentTopic( NewsletterBlog topic, Plugin plugin );
 
     /**
-     * Remove a newsletter htmldocs topic from the database
+     * Remove a newsletter blogs topic from the database
      * 
      * @param nIdTopic
-     *            The id of the newsletter htmldocs topic to remove
+     *            The id of the newsletter blogs topic to remove
      * @param plugin
      *            The plugin
      */
     void deleteDocumentTopic( int nIdTopic, Plugin plugin );
 
     /**
-     * Insert a new newsletter htmldocs topic into the database
+     * Insert a new newsletter blogs topic into the database
      * 
      * @param topic
-     *            The newsletter htmldocs topic to insert
+     *            The newsletter blogs topic to insert
      * @param plugin
      *            the plugin
      */
-    void createDocumentTopic( NewsletterHtmlDoc topic, Plugin plugin );
+    void createDocumentTopic( NewsletterBlog topic, Plugin plugin );
 
     /**
      * Associate a new category to a newsletter topic
@@ -55,19 +55,19 @@ public interface INewsletterHtmlDocDAO
      * @param nTopicId
      *            the topic id
      * @param nDocumentCategoryId
-     *            the htmldocs tag identifier
+     *            the blogs tag identifier
      * @param plugin
-     *            the newsletter htmldocs plugin
+     *            the newsletter blogs plugin
      */
     void associateNewsLetterDocumentTag( int nTopicId, int nTagId, Plugin plugin );
 
     /**
-     * Remove the relationship between a topic and the list of htmldocs
+     * Remove the relationship between a topic and the list of blogs
      * 
      * @param nTopicId
      *            the topic id
      * @param plugin
-     *            the newsletter htmldocs plugin
+     *            the newsletter blogs plugin
      */
     void deleteNewsLetterDocumentTags( int nTopicId, Plugin plugin );
 
@@ -77,7 +77,7 @@ public interface INewsletterHtmlDocDAO
      * @param nTopicId
      *            the topic id
      * @param plugin
-     *            the newsletter htmldocs plugin
+     *            the newsletter blogs plugin
      * @return the array of tag id
      */
     int [ ] selectNewsletterTagIds( int nTopicId, Plugin plugin );
@@ -90,7 +90,7 @@ public interface INewsletterHtmlDocDAO
      * @param nPortletId
      *            the portlet identifier
      * @param plugin
-     *            the newsletter htmldocs plugin
+     *            the newsletter blogs plugin
      */
     void associateNewsLetterDocumentPortlet( int nTopicId, int nPortletId, Plugin plugin );
 
@@ -100,17 +100,17 @@ public interface INewsletterHtmlDocDAO
      * @param nTopicId
      *            the topic id
      * @param plugin
-     *            the newsletter htmldocs plugin
+     *            the newsletter blogs plugin
      */
     void deleteNewsLetterDocumentPortlet( int nTopicId, Plugin plugin );
 
     /**
-     * loads the list of htmldocs list portlets linked to the newsletter
+     * loads the list of blogs list portlets linked to the newsletter
      * 
      * @param nTopicId
      *            the topic id
      * @param plugin
-     *            the newsletter htmldocs plugin
+     *            the newsletter blogs plugin
      * @return the array of categories id
      */
     int [ ] selectNewsletterPortletsIds( int nTopicId, Plugin plugin );

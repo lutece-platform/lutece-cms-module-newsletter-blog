@@ -1,9 +1,9 @@
 package fr.paris.lutece.plugins.newsletter.modules.blog.business;
 
 /**
- * Newsletter htmldocs topic class
+ * Newsletter blogs topic class
  */
-public class NewsletterHtmlDoc
+public class NewsletterBlog
 {
     private int _nId;
     private int _nIdTemplate;
@@ -31,9 +31,9 @@ public class NewsletterHtmlDoc
     }
 
     /**
-     * Get the id of the template to apply to htmldocs of this topic
+     * Get the id of the template to apply to blogs of this topic
      * 
-     * @return The id of the template to apply to htmldocs of this topic
+     * @return The id of the template to apply to blogs of this topic
      */
     public int getIdTemplate( )
     {
@@ -41,10 +41,10 @@ public class NewsletterHtmlDoc
     }
 
     /**
-     * Set the id of the template to apply to htmldocs of this topic
+     * Set the id of the template to apply to blogs of this topic
      * 
      * @param nIdTemplate
-     *            The id of the template to apply to htmldocs of this topic
+     *            The id of the template to apply to blogs of this topic
      */
     public void setIdTemplate( int nIdTemplate )
     {
@@ -52,9 +52,9 @@ public class NewsletterHtmlDoc
     }
 
     /**
-     * Check if this topic use htmldocs tags to get the htmldocs list, or document list portlets
+     * Check if this topic use blogs tags to get the blogs list, or document list portlets
      * 
-     * @return True if this topic use htmldocs categories to get the htmldocs list, false if it use portlets.
+     * @return True if this topic use blogs categories to get the blogs list, false if it use portlets.
      */
     public boolean getUseDocumentTags( )
     {
@@ -62,10 +62,10 @@ public class NewsletterHtmlDoc
     }
 
     /**
-     * Set the flag to indicates if this topic use htmldocs tags to get the htmldocs list, or htmldocs list portlets
+     * Set the flag to indicates if this topic use blogs tags to get the blogs list, or blogs list portlets
      * 
      * @param bUseDocumentTags
-     *            True if this topic use htmldocs tags to get the document list, false if it use portlets.
+     *            True if this topic use blogs tags to get the document list, false if it use portlets.
      */
     public void setUseDocumentTags( boolean bUseDocumentTags )
     {

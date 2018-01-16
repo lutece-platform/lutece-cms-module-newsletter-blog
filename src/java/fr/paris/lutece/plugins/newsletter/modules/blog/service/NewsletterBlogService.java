@@ -1,14 +1,14 @@
 package fr.paris.lutece.plugins.newsletter.modules.blog.service;
 
-import fr.paris.lutece.plugins.blog.business.HtmlDoc;
-import fr.paris.lutece.plugins.blog.business.HtmlDocFilter;
-import fr.paris.lutece.plugins.blog.business.HtmlDocHome;
-import fr.paris.lutece.plugins.blog.business.portlet.HtmlDocsListPortletHome;
-import fr.paris.lutece.plugins.blog.service.HtmldocsPlugin;
+import fr.paris.lutece.plugins.blog.business.Blog;
+import fr.paris.lutece.plugins.blog.business.BlogFilter;
+import fr.paris.lutece.plugins.blog.business.BlogHome;
+import fr.paris.lutece.plugins.blog.business.portlet.BlogListPortletHome;
+import fr.paris.lutece.plugins.blog.service.BlogPlugin;
 import fr.paris.lutece.plugins.blog.service.PublishingService;
-import fr.paris.lutece.plugins.newsletter.modules.blog.business.NewsletterHtmlDoc;
-import fr.paris.lutece.plugins.newsletter.modules.blog.business.NewsletterHtmlDocHome;
-import fr.paris.lutece.plugins.newsletter.modules.blog.util.NewsletterHtmlDocUtils;
+import fr.paris.lutece.plugins.newsletter.modules.blog.business.NewsletterBlog;
+import fr.paris.lutece.plugins.newsletter.modules.blog.business.NewsletterBlogHome;
+import fr.paris.lutece.plugins.newsletter.modules.blog.util.NewsletterBlogUtils;
 import fr.paris.lutece.plugins.newsletter.service.NewsletterPlugin;
 import fr.paris.lutece.plugins.newsletter.service.NewsletterService;
 import fr.paris.lutece.plugins.newsletter.util.NewsLetterConstants;
@@ -38,11 +38,12 @@ import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.ArrayUtils;
 
 /**
- * Newsletter document service. This class implements the singleton design pattern.
+ * Newsletter blog service. This class implements the singleton design pattern.
  */
-public class NewsletterHtmlDocService
+public class NewsletterBlogService
 {
     private static final String FULLSTOP = ".";
 
@@ -53,7 +54,7 @@ public class NewsletterHtmlDocService
 
     private static final String DOCUMENT_RESOURCE_SERVLET_URL = "servlet/plugins/blog/file";
 
-    private static NewsletterHtmlDocService _singleton = new NewsletterHtmlDocService( );
+    private static NewsletterBlogService _singleton = new NewsletterBlogService( );
     private NewsletterService _newsletterService = NewsletterService.getService( );
 
     /**
@@ -61,7 +62,7 @@ public class NewsletterHtmlDocService
      * 
      * @return The instance of the singleton
      */
-    public static NewsletterHtmlDocService getInstance( )
+    public static NewsletterBlogService getInstance( )
     {
         return _singleton;
     }
@@ -70,20 +71,20 @@ public class NewsletterHtmlDocService
      * Copy specified document's type file into a given folder
      * 
      * @param document
-     *            the htmldoc
+     *            the blog
      * @param strFileType
      *            the file type
      * @param strDestFolderPath
      *            the destination folder
      * @return name of the copy file or null if there is no copied file
      */
-    public String copyFileFromDocument( HtmlDoc document, String strFileType, String strDestFolderPath )
+    public String copyFileFromDocument( Blog document, String strFileType, String strDestFolderPath )
     {
         String strFileName = null;
 
         byte [ ] tabByte = document.getDocContent( ).getBinaryValue( );
-        strFileName = NewsletterHtmlDocUtils.formatInteger( document.getId( ), 5 )
-                + NewsletterHtmlDocUtils.formatInteger( document.getDocContent( ).getId( ), 5 ) + NewsletterHtmlDocUtils.formatInteger( 1, 5 ) + FULLSTOP
+        strFileName = NewsletterBlogUtils.formatInteger( document.getId( ), 5 )
+                + NewsletterBlogUtils.formatInteger( document.getDocContent( ).getId( ), 5 ) + NewsletterBlogUtils.formatInteger( 1, 5 ) + FULLSTOP
                 + StringUtils.substringAfterLast( document.getDocContent( ).getTextValue( ), FULLSTOP );
 
         FileOutputStream fos = null;
@@ -136,21 +137,21 @@ public class NewsletterHtmlDocService
      *            The locale
      * @return the html code for the document list of null if no document template available
      */
-    public String generateDocumentsList( NewsletterHtmlDoc newsletterDocument, int nTemplateId, Timestamp datePublishing, String strBaseUrl, AdminUser user,
+    public String generateDocumentsList( NewsletterBlog newsletterDocument, int nTemplateId, Timestamp datePublishing, String strBaseUrl, AdminUser user,
             Locale locale )
     {
         Plugin pluginNewsLetter = PluginService.getPlugin( NewsletterPlugin.PLUGIN_NAME );
-        HtmlDocFilter documentFilter = new HtmlDocFilter( );
+        BlogFilter documentFilter = new BlogFilter( );
         String strTemplatePath = NewsletterUtils.getHtmlTemplatePath( nTemplateId, pluginNewsLetter );
 
         if ( strTemplatePath == null )
         {
             return null;
         }
-        Collection<HtmlDoc> listDocuments = null;
+        Collection<Blog> listDocuments = null;
         if ( newsletterDocument.getUseDocumentTags( ) )
         {
-            int [ ] arrayTagIds = NewsletterHtmlDocHome.findNewsletterTagIds( newsletterDocument.getId( ), pluginNewsLetter );
+            Integer [ ] arrayTagIds = ArrayUtils.toObject(NewsletterBlogHome.findNewsletterTagIds( newsletterDocument.getId( ), pluginNewsLetter ));
             if ( arrayTagIds != null && arrayTagIds.length > 0 )
             {
                 documentFilter.setTagsId( arrayTagIds );
@@ -159,15 +160,15 @@ public class NewsletterHtmlDocService
         }
         else
         {
-            int [ ] arrayPortletsIds = NewsletterHtmlDocHome.findNewsletterPortletsIds( newsletterDocument.getId( ), pluginNewsLetter );
+            int [ ] arrayPortletsIds = NewsletterBlogHome.findNewsletterPortletsIds( newsletterDocument.getId( ), pluginNewsLetter );
             if ( arrayPortletsIds != null && arrayPortletsIds.length > 0 )
             {
-                Plugin documentPlugin = PluginService.getPlugin( HtmldocsPlugin.PLUGIN_NAME );
-                List<Integer> listDocumentIds = NewsletterHtmlDocHome.getPublishedDocumentsIdsListByPortletIds( arrayPortletsIds, datePublishing,
+                Plugin documentPlugin = PluginService.getPlugin( BlogPlugin.PLUGIN_NAME );
+                List<Integer> listDocumentIds = NewsletterBlogHome.getPublishedDocumentsIdsListByPortletIds( arrayPortletsIds, datePublishing,
                         datePublishing, documentPlugin );
                 if ( listDocumentIds != null && listDocumentIds.size( ) > 0 )
                 {
-                    int [ ] arrayDocumentsId = new int [ listDocumentIds.size( )];
+                    Integer [ ] arrayDocumentsId = new Integer [ listDocumentIds.size( )];
                     int nIndex = 0;
                     for ( int nDocumentId : listDocumentIds )
                     {
@@ -176,7 +177,7 @@ public class NewsletterHtmlDocService
                     }
                     documentFilter.setIds( arrayDocumentsId );
                     documentFilter.setLoadBinaries( true );
-                    listDocuments = HtmlDocHome.findByFilter( documentFilter, locale );
+                    listDocuments = BlogHome.findByFilter( documentFilter, locale );
                 }
             }
         }
@@ -189,7 +190,7 @@ public class NewsletterHtmlDocService
         StringBuffer sbDocumentLists = new StringBuffer( );
 
         // get html from templates
-        for ( HtmlDoc document : listDocuments )
+        for ( Blog document : listDocuments )
         {
             String strContent = fillTemplateWithDocumentInfos( strTemplatePath, document, locale, strBaseUrl, user );
             sbDocumentLists.append( strContent );
@@ -213,7 +214,7 @@ public class NewsletterHtmlDocService
      * @param user
      *            The current user
      */
-    public String fillTemplateWithDocumentInfos( String strTemplatePath, HtmlDoc document, Locale locale, String strBaseUrl, AdminUser user )
+    public String fillTemplateWithDocumentInfos( String strTemplatePath, Blog document, Locale locale, String strBaseUrl, AdminUser user )
     {
         Collection<Portlet> porletCollec = PublishingService.getInstance( ).getPortletsByDocumentId( Integer.toString( document.getId( ) ) );
         porletCollec = PortletService.getInstance( ).getAuthorizedPortletCollection( porletCollec, user );
@@ -228,7 +229,7 @@ public class NewsletterHtmlDocService
             if ( _newsletterService.useUnsecuredImages( ) )
             {
                 String strImgFolder = _newsletterService.getUnsecuredImagefolder( );
-                String pictureName = NewsletterHtmlDocService.getInstance( ).copyFileFromDocument( document, NewsletterHtmlDocUtils.CONSTANT_IMG_FILE_TYPE,
+                String pictureName = NewsletterBlogService.getInstance( ).copyFileFromDocument( document, NewsletterBlogUtils.CONSTANT_IMG_FILE_TYPE,
                         _newsletterService.getUnsecuredFolderPath( ) + strImgFolder );
                 if ( pictureName != null )
                 {
@@ -256,18 +257,18 @@ public class NewsletterHtmlDocService
     }
 
     /**
-     * Load the portlet of type HTMLDOC_LIST
+     * Load the portlet of type blog_LIST
      * 
      * @return
      */
-    public ReferenceList getPortletHtmlDocList( )
+    public ReferenceList getPortletBlogList( )
     {
 
         ReferenceList list = new ReferenceList( );
-        String className = HtmlDocsListPortletHome.class.getName( );
+        String className = BlogListPortletHome.class.getName( );
         String strPortletTypeId = PortletTypeHome.getPortletTypeId( className );
 
-        for ( Portlet pt : PublishingService.getInstance( ).getHtmlDocsPortlets( ) )
+        for ( Portlet pt : PublishingService.getInstance( ).getBlogsPortlets( ) )
         {
 
             if ( pt.getPortletTypeId( ).equals( strPortletTypeId ) )

@@ -10,7 +10,7 @@ import java.util.Locale;
 /**
  * Removal listener for templates used by newsletters
  */
-public class NewsletterHtmlDocTemplateRemovalListener implements RemovalListener
+public class NewsletterBlogTemplateRemovalListener implements RemovalListener
 {
     private static final String MESSAGE_TEMPLATE_USED_BY_NEWSLETTER = "module.newsletter.blog.message.templateUsedByDocumentTopic";
 
@@ -20,7 +20,7 @@ public class NewsletterHtmlDocTemplateRemovalListener implements RemovalListener
     @Override
     public boolean canBeRemoved( String strId )
     {
-        return !NewsletterHtmlDocHome.findTemplate( Integer.parseInt( strId ), PluginService.getPlugin( NewsletterPlugin.PLUGIN_NAME ) );
+        return !NewsletterBlogHome.findTemplate( Integer.parseInt( strId ), PluginService.getPlugin( NewsletterPlugin.PLUGIN_NAME ) );
     }
 
     /**

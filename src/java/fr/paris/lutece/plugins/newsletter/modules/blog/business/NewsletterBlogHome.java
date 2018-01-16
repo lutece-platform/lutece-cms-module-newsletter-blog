@@ -15,19 +15,19 @@ import java.util.List;
 /**
  * Home for newsletter document
  */
-public final class NewsletterHtmlDocHome
+public final class NewsletterBlogHome
 {
-    private static INewsletterHtmlDocDAO _dao = SpringContextService.getBean( "newsletter-blog.newsletterHtmlDocDAO" );
+    private static INewsletterBlogDAO _dao = SpringContextService.getBean( "newsletter-blog.newsletterBlogDAO" );
 
     /**
      * Private constructor
      */
-    private NewsletterHtmlDocHome( )
+    private NewsletterBlogHome( )
     {
     }
 
     /**
-     * Get a newsletter htmldocs topic from its id
+     * Get a newsletter blogs topic from its id
      * 
      * @param nIdTopic
      *            the id of the topic to get
@@ -35,29 +35,29 @@ public final class NewsletterHtmlDocHome
      *            The plugin
      * @return The topic, or null if no topic was found
      */
-    public static NewsletterHtmlDoc findByPrimaryKey( int nIdTopic, Plugin plugin )
+    public static NewsletterBlog findByPrimaryKey( int nIdTopic, Plugin plugin )
     {
         return _dao.findByPrimaryKey( nIdTopic, plugin );
     }
 
     /**
-     * Update a newsletter htmldocs topic
+     * Update a newsletter blogs topic
      * 
      * @param topic
      *            The topic to update
      * @param plugin
      *            The plugin
      */
-    public static void updateDocumentTopic( NewsletterHtmlDoc topic, Plugin plugin )
+    public static void updateDocumentTopic( NewsletterBlog topic, Plugin plugin )
     {
         _dao.updateDocumentTopic( topic, plugin );
     }
 
     /**
-     * Remove a newsletter htmldocs topic from the database
+     * Remove a newsletter blogs topic from the database
      * 
      * @param nIdTopic
-     *            The id of the newsletter htmldocs topic to remove
+     *            The id of the newsletter blogs topic to remove
      * @param plugin
      *            The plugin
      */
@@ -67,14 +67,14 @@ public final class NewsletterHtmlDocHome
     }
 
     /**
-     * Insert a new newsletter htmldocs topic into the database
+     * Insert a new newsletter blogs topic into the database
      * 
      * @param topic
-     *            The newsletter htmldocs topic to insert
+     *            The newsletter blogs topic to insert
      * @param plugin
      *            the plugin
      */
-    public static void createDocumentTopic( NewsletterHtmlDoc topic, Plugin plugin )
+    public static void createDocumentTopic( NewsletterBlog topic, Plugin plugin )
     {
         _dao.createDocumentTopic( topic, plugin );
     }
@@ -100,12 +100,12 @@ public final class NewsletterHtmlDocHome
     }
 
     /**
-     * Associate a htmldocs category to a newsletter topic
+     * Associate a blogs category to a newsletter topic
      * 
      * @param nTopicId
      *            the topic identifier
      * @param nDocumentTagId
-     *            the id of the htmldocs tag to associate
+     *            the id of the blogs tag to associate
      * @param plugin
      *            the Plugin
      */
@@ -115,7 +115,7 @@ public final class NewsletterHtmlDocHome
     }
 
     /**
-     * Removes the relationship between a list of htmldocs categories and a newsletter topic
+     * Removes the relationship between a list of blogs categories and a newsletter topic
      * 
      * @param nTopicId
      *            the newsletter identifier
@@ -149,7 +149,7 @@ public final class NewsletterHtmlDocHome
      * @param nPortletId
      *            the portlet identifier
      * @param plugin
-     *            the newsletter htmldocs plugin
+     *            the newsletter blogs plugin
      */
     public static void associateNewsLetterDocumentPortlet( int nTopicId, int nPortletId, Plugin plugin )
     {
@@ -162,7 +162,7 @@ public final class NewsletterHtmlDocHome
      * @param nTopicId
      *            the topic id
      * @param plugin
-     *            the newsletter htmldocs plugin
+     *            the newsletter blogs plugin
      */
     public static void removeNewsLetterDocumentPortlet( int nTopicId, Plugin plugin )
     {
@@ -170,7 +170,7 @@ public final class NewsletterHtmlDocHome
     }
 
     /**
-     * loads the list of htmldocs list portlets linked to the newsletter
+     * loads the list of blogs list portlets linked to the newsletter
      * 
      * @param nTopicId
      *            the topic identifier
@@ -184,7 +184,7 @@ public final class NewsletterHtmlDocHome
     }
 
     /**
-     * Get the list of id of published htmldocs associated with a given collection of portlets.
+     * Get the list of id of published blogs associated with a given collection of portlets.
      * 
      * @param nPortletsIds
      *            The list of portlet ids.

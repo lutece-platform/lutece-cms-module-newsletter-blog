@@ -33,14 +33,14 @@
  */
 package fr.paris.lutece.plugins.newsletter.modules.blog.web;
 
-import fr.paris.lutece.plugins.blog.business.HtmlDoc;
-import fr.paris.lutece.plugins.blog.business.HtmlDocFilter;
-import fr.paris.lutece.plugins.blog.service.HtmlDocService;
+import fr.paris.lutece.plugins.blog.business.Blog;
+import fr.paris.lutece.plugins.blog.business.BlogFilter;
+import fr.paris.lutece.plugins.blog.service.BlogService;
 import fr.paris.lutece.plugins.blog.service.PublishingService;
 import fr.paris.lutece.plugins.newsletter.business.NewsLetterTemplateHome;
-import fr.paris.lutece.plugins.newsletter.modules.blog.service.NewsletterHtmlDocService;
-import fr.paris.lutece.plugins.newsletter.modules.blog.service.NewsletterHtmlDocTopicService;
-import fr.paris.lutece.plugins.newsletter.modules.blog.util.NewsletterHtmlDocUtils;
+import fr.paris.lutece.plugins.newsletter.modules.blog.service.NewsletterBlogService;
+import fr.paris.lutece.plugins.newsletter.modules.blog.service.NewsletterBlogTopicService;
+import fr.paris.lutece.plugins.newsletter.modules.blog.util.NewsletterBlogUtils;
 import fr.paris.lutece.plugins.newsletter.service.NewsletterPlugin;
 import fr.paris.lutece.plugins.newsletter.service.NewsletterService;
 import fr.paris.lutece.plugins.newsletter.util.NewsLetterConstants;
@@ -88,8 +88,8 @@ public class NewsletterDocumentServiceJspBean extends InsertServiceJspBean imple
     private static final long serialVersionUID = -4095074358460689539L;
 
     // templates
-    private static final String TEMPLATE_SELECT_DOCUMENTS = "admin/plugins/newsletter/modules/blog/select_htmldocs.html";
-    private static final String TEMPLATE_INSERT_DOCEMENTS = "admin/plugins/newsletter/modules/blog/insert_htmldocs.html";
+    private static final String TEMPLATE_SELECT_DOCUMENTS = "admin/plugins/newsletter/modules/blog/select_blogs.html";
+    private static final String TEMPLATE_INSERT_DOCEMENTS = "admin/plugins/newsletter/modules/blog/insert_blogs.html";
 
     // bookmarks
     private static final String BOOKMARK_START_PUBLISHED_DATE = "start_published_date";
@@ -146,7 +146,7 @@ public class NewsletterDocumentServiceJspBean extends InsertServiceJspBean imple
 
         // Criteria
         // Combo of available document list portlets
-        ReferenceList listDocumentPortlets = NewsletterHtmlDocService.getInstance( ).getPortletHtmlDocList( );
+        ReferenceList listDocumentPortlets = NewsletterBlogService.getInstance( ).getPortletBlogList( );
         ReferenceItem refItem = new ReferenceItem( );
         refItem.setCode( CONSTANT_STRING_ZERO );
         refItem.setName( I18nService.getLocalizedString( LABEL_FRAGMENT_COMBO_ALL_DOCUMENT_LIST_ITEM, locale ) );
@@ -157,15 +157,15 @@ public class NewsletterDocumentServiceJspBean extends InsertServiceJspBean imple
         model.put( BOOKMARK_START_PUBLISHED_DATE, strPublishedDate );
 
         // Document list
-        HtmlDocFilter documentFilter = new HtmlDocFilter( );
-        int tableauEntier [ ] = {
+        BlogFilter documentFilter = new BlogFilter( );
+        Integer tableauEntier [ ] = {
             nDocumentTagId
         };
         documentFilter.setTagsId( tableauEntier );
-        Collection<HtmlDoc> list = PublishingService.getInstance( ).getPublishedDocumentsSinceDate( publishedDate, publishedDate, documentFilter, locale );
+        Collection<Blog> list = PublishingService.getInstance( ).getPublishedDocumentsSinceDate( publishedDate, publishedDate, documentFilter, locale );
         model.put( MARK_DOCUMENT_LIST, list );
 
-        ReferenceList templateList = NewsLetterTemplateHome.getTemplatesListByType( NewsletterHtmlDocTopicService.NEWSLETTER_DOCUMENT_TOPIC_TYPE,
+        ReferenceList templateList = NewsLetterTemplateHome.getTemplatesListByType( NewsletterBlogTopicService.NEWSLETTER_DOCUMENT_TOPIC_TYPE,
                 pluginNewsletter );
         model.put( MARK_TEMPLATES_LIST, templateList );
 
@@ -231,8 +231,8 @@ public class NewsletterDocumentServiceJspBean extends InsertServiceJspBean imple
         for ( int i = 0; i < strDocumentsIdsList.length; i++ )
         {
             int nDocumentId = Integer.parseInt( strDocumentsIdsList [i] );
-            HtmlDoc document = HtmlDocService.getInstance( ).findByPrimaryKeyWithoutBinaries( nDocumentId );
-            String strDocumentHtmlCode = NewsletterHtmlDocService.getInstance( ).fillTemplateWithDocumentInfos( strPathDocumentTemplate, document, locale,
+            Blog document = BlogService.getInstance( ).findByPrimaryKeyWithoutBinaries( nDocumentId );
+            String strDocumentHtmlCode = NewsletterBlogService.getInstance( ).fillTemplateWithDocumentInfos( strPathDocumentTemplate, document, locale,
                     strBaseUrl, AdminUserService.getAdminUser( request ) );
             documentsList.add( strDocumentHtmlCode );
         }
@@ -249,7 +249,7 @@ public class NewsletterDocumentServiceJspBean extends InsertServiceJspBean imple
         {
             String strUnsecuredFolder = _newsletterService.getUnsecuredImagefolder( );
             String strUnsecuredFolderPath = _newsletterService.getUnsecuredFolderPath( );
-            strContent = NewsletterHtmlDocUtils.rewriteImgUrls( strContent, AppPathService.getBaseUrl( ), _newsletterService.getUnsecuredWebappUrl( ),
+            strContent = NewsletterBlogUtils.rewriteImgUrls( strContent, AppPathService.getBaseUrl( ), _newsletterService.getUnsecuredWebappUrl( ),
                     strUnsecuredFolderPath, strUnsecuredFolder );
         }
 

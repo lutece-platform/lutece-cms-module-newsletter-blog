@@ -2,7 +2,7 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 
 <beans>
-	<bean id="newsletter-blog.newsletterHtmlDocDAO" class="fr.paris.lutece.plugins.newsletter.modules.blog.business.NewsletterHtmlDocDAO" />
+	<bean id="newsletter-blog.newsletterBlogDAO" class="fr.paris.lutece.plugins.newsletter.modules.blog.business.NewsletterBlogDAO" />
 	
-	<bean id="newsletter-blog.newsHtmlDocTopicService" class="fr.paris.lutece.plugins.newsletter.modules.blog.service.NewsletterHtmlDocTopicService" />
+	<bean id="newsletter-blog.newsBlogTopicService" class="fr.paris.lutece.plugins.newsletter.modules.blog.service.NewsletterBlogTopicService" />
 </beans>

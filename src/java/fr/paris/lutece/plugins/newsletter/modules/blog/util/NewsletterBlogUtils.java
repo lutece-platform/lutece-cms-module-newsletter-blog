@@ -5,7 +5,7 @@ import org.apache.commons.lang.StringUtils;
 /**
  * Utility class for newsletter document
  */
-public final class NewsletterHtmlDocUtils
+public final class NewsletterBlogUtils
 {
     /**
      * Image file type
@@ -17,7 +17,7 @@ public final class NewsletterHtmlDocUtils
     /**
      * Private constructor
      */
-    private NewsletterHtmlDocUtils( )
+    private NewsletterBlogUtils( )
     {
 
     }
@@ -44,9 +44,9 @@ public final class NewsletterHtmlDocUtils
         {
             return StringUtils.EMPTY;
         }
-        HtmlDomDocNewsletterDocument doc = new HtmlDomDocNewsletterDocument( strContent, strBaseUrl );
-        doc.convertUrlsToUnsecuredUrls( HtmlDomDocNewsletterDocument.ELEMENT_IMG, strUnsecuredBaseUrl, strUnsecuredFolderPath, strUnsecuredFolder );
-        doc.convertUrlsToUnsecuredUrls( HtmlDomDocNewsletterDocument.ELEMENT_A, strUnsecuredBaseUrl, strUnsecuredFolderPath, strUnsecuredFolder );
+        BlogNewsletterDocument doc = new BlogNewsletterDocument( strContent, strBaseUrl );
+        doc.convertUrlsToUnsecuredUrls( BlogNewsletterDocument.ELEMENT_IMG, strUnsecuredBaseUrl, strUnsecuredFolderPath, strUnsecuredFolder );
+        doc.convertUrlsToUnsecuredUrls( BlogNewsletterDocument.ELEMENT_A, strUnsecuredBaseUrl, strUnsecuredFolderPath, strUnsecuredFolder );
 
         return doc.getContent( );
     }
