@@ -3,6 +3,7 @@ package fr.paris.lutece.plugins.newsletter.modules.blog.service;
 import fr.paris.lutece.plugins.blog.business.Blog;
 import fr.paris.lutece.plugins.blog.business.BlogFilter;
 import fr.paris.lutece.plugins.blog.business.BlogHome;
+import fr.paris.lutece.plugins.blog.business.DocContent;
 import fr.paris.lutece.plugins.blog.business.portlet.BlogListPortletHome;
 import fr.paris.lutece.plugins.blog.service.BlogPlugin;
 import fr.paris.lutece.plugins.blog.service.PublishingService;
@@ -81,11 +82,17 @@ public class NewsletterBlogService
     public String copyFileFromDocument( Blog document, String strFileType, String strDestFolderPath )
     {
         String strFileName = null;
-
-        byte [ ] tabByte = document.getDocContent( ).getBinaryValue( );
+        
+        if(document.getDocContent( ).size() == 0){
+        	
+        	return strFileName;
+        }
+        // get the first file
+        DocContent docContent= document.getDocContent( ).get( 0 );
+        byte [ ] tabByte = docContent.getBinaryValue( );
         strFileName = NewsletterBlogUtils.formatInteger( document.getId( ), 5 )
-                + NewsletterBlogUtils.formatInteger( document.getDocContent( ).getId( ), 5 ) + NewsletterBlogUtils.formatInteger( 1, 5 ) + FULLSTOP
-                + StringUtils.substringAfterLast( document.getDocContent( ).getTextValue( ), FULLSTOP );
+                + NewsletterBlogUtils.formatInteger( docContent.getId( ), 5 ) + NewsletterBlogUtils.formatInteger( 1, 5 ) + FULLSTOP
+                + StringUtils.substringAfterLast( docContent.getTextValue( ), FULLSTOP );
 
         FileOutputStream fos = null;
 
@@ -241,7 +248,7 @@ public class NewsletterBlogService
                 String strProdUrl = AppPathService.getProdUrl( strBaseUrl );
 
                 UrlItem urlItem = new UrlItem( strProdUrl + DOCUMENT_RESOURCE_SERVLET_URL );
-                urlItem.addParameter( MARK_FILE_ID, ( document.getDocContent( ) != null ) ? document.getDocContent( ).getId( ) : 0 );
+                urlItem.addParameter( MARK_FILE_ID, ( document.getDocContent( ) != null && document.getDocContent( ).size() != 0) ? document.getDocContent( ).get( 0 ).getId( ) : 0 );
                 model.put( MARK_IMG_PATH, urlItem.getUrl( ) );
 
             }
