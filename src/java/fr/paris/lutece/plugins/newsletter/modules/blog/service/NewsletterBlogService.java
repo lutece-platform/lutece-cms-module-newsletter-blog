@@ -2,10 +2,10 @@ package fr.paris.lutece.plugins.newsletter.modules.blog.service;
 
 import fr.paris.lutece.plugins.blog.business.Blog;
 import fr.paris.lutece.plugins.blog.business.BlogFilter;
-import fr.paris.lutece.plugins.blog.business.BlogHome;
 import fr.paris.lutece.plugins.blog.business.DocContent;
 import fr.paris.lutece.plugins.blog.business.portlet.BlogListPortletHome;
 import fr.paris.lutece.plugins.blog.service.BlogPlugin;
+import fr.paris.lutece.plugins.blog.service.BlogService;
 import fr.paris.lutece.plugins.blog.service.PublishingService;
 import fr.paris.lutece.plugins.newsletter.modules.blog.business.NewsletterBlog;
 import fr.paris.lutece.plugins.newsletter.modules.blog.business.NewsletterBlogHome;
@@ -163,7 +163,7 @@ public class NewsletterBlogService
             {
                 documentFilter.setTagsId( arrayTagIds );
             }
-            listDocuments = PublishingService.getInstance( ).getPublishedDocumentsSinceDate( datePublishing, datePublishing, documentFilter, locale );
+            listDocuments = PublishingService.getInstance( ).getPublishedBlogsSinceDate( datePublishing, datePublishing, documentFilter, locale );
         }
         else
         {
@@ -184,7 +184,7 @@ public class NewsletterBlogService
                     }
                     documentFilter.setIds( arrayDocumentsId );
                     documentFilter.setLoadBinaries( true );
-                    listDocuments = BlogHome.findByFilter( documentFilter, locale );
+                    listDocuments = BlogService.getInstance().findByFilter( documentFilter );
                 }
             }
         }
@@ -223,7 +223,7 @@ public class NewsletterBlogService
      */
     public String fillTemplateWithDocumentInfos( String strTemplatePath, Blog document, Locale locale, String strBaseUrl, AdminUser user )
     {
-        Collection<Portlet> porletCollec = PublishingService.getInstance( ).getPortletsByDocumentId( Integer.toString( document.getId( ) ) );
+        Collection<Portlet> porletCollec = PublishingService.getInstance( ).getPortletsByBlogId( Integer.toString( document.getId( ) ) );
         porletCollec = PortletService.getInstance( ).getAuthorizedPortletCollection( porletCollec, user );
         // the document insert in the buffer must be publish in a authorized portlet
         if ( porletCollec.size( ) > 0 )

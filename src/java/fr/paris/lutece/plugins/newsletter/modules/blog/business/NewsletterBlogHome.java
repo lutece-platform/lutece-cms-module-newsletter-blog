@@ -196,7 +196,7 @@ public final class NewsletterBlogHome
      */
     public static List<Integer> getPublishedDocumentsIdsListByPortletIds( int [ ] nPortletsIds, Date datePublishing, Date dateEndPublishing, Plugin plugin )
     {
-        return PublishingService.getInstance( ).getPublishedDocumentsIdsListByPortletIds( nPortletsIds, datePublishing, dateEndPublishing, plugin );
+        return PublishingService.getInstance( ).getPublishedBlogsIdsListByPortletIds( nPortletsIds, datePublishing, dateEndPublishing, plugin );
     }
 
     /**

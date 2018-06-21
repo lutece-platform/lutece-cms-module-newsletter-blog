@@ -162,7 +162,7 @@ public class NewsletterDocumentServiceJspBean extends InsertServiceJspBean imple
             nDocumentTagId
         };
         documentFilter.setTagsId( tableauEntier );
-        Collection<Blog> list = PublishingService.getInstance( ).getPublishedDocumentsSinceDate( publishedDate, publishedDate, documentFilter, locale );
+        Collection<Blog> list = PublishingService.getInstance( ).getPublishedBlogsSinceDate( publishedDate, publishedDate, documentFilter, locale );
         model.put( MARK_DOCUMENT_LIST, list );
 
         ReferenceList templateList = NewsLetterTemplateHome
