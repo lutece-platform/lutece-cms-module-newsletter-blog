@@ -82,17 +82,17 @@ public class NewsletterBlogService
     public String copyFileFromDocument( Blog document, String strFileType, String strDestFolderPath )
     {
         String strFileName = null;
-        
-        if(document.getDocContent( ).size() == 0){
-        	
-        	return strFileName;
+
+        if ( document.getDocContent( ).size( ) == 0 )
+        {
+
+            return strFileName;
         }
         // get the first file
-        DocContent docContent= document.getDocContent( ).get( 0 );
+        DocContent docContent = document.getDocContent( ).get( 0 );
         byte [ ] tabByte = docContent.getBinaryValue( );
-        strFileName = NewsletterBlogUtils.formatInteger( document.getId( ), 5 )
-                + NewsletterBlogUtils.formatInteger( docContent.getId( ), 5 ) + NewsletterBlogUtils.formatInteger( 1, 5 ) + FULLSTOP
-                + StringUtils.substringAfterLast( docContent.getTextValue( ), FULLSTOP );
+        strFileName = NewsletterBlogUtils.formatInteger( document.getId( ), 5 ) + NewsletterBlogUtils.formatInteger( docContent.getId( ), 5 )
+                + NewsletterBlogUtils.formatInteger( 1, 5 ) + FULLSTOP + StringUtils.substringAfterLast( docContent.getTextValue( ), FULLSTOP );
 
         FileOutputStream fos = null;
 
@@ -158,7 +158,7 @@ public class NewsletterBlogService
         Collection<Blog> listDocuments = null;
         if ( newsletterDocument.getUseDocumentTags( ) )
         {
-            Integer [ ] arrayTagIds = ArrayUtils.toObject(NewsletterBlogHome.findNewsletterTagIds( newsletterDocument.getId( ), pluginNewsLetter ));
+            Integer [ ] arrayTagIds = ArrayUtils.toObject( NewsletterBlogHome.findNewsletterTagIds( newsletterDocument.getId( ), pluginNewsLetter ) );
             if ( arrayTagIds != null && arrayTagIds.length > 0 )
             {
                 documentFilter.setTagsId( arrayTagIds );
@@ -171,8 +171,8 @@ public class NewsletterBlogService
             if ( arrayPortletsIds != null && arrayPortletsIds.length > 0 )
             {
                 Plugin documentPlugin = PluginService.getPlugin( BlogPlugin.PLUGIN_NAME );
-                List<Integer> listDocumentIds = NewsletterBlogHome.getPublishedDocumentsIdsListByPortletIds( arrayPortletsIds, datePublishing,
-                        datePublishing, documentPlugin );
+                List<Integer> listDocumentIds = NewsletterBlogHome.getPublishedDocumentsIdsListByPortletIds( arrayPortletsIds, datePublishing, datePublishing,
+                        documentPlugin );
                 if ( listDocumentIds != null && listDocumentIds.size( ) > 0 )
                 {
                     Integer [ ] arrayDocumentsId = new Integer [ listDocumentIds.size( )];
@@ -248,7 +248,8 @@ public class NewsletterBlogService
                 String strProdUrl = AppPathService.getProdUrl( strBaseUrl );
 
                 UrlItem urlItem = new UrlItem( strProdUrl + DOCUMENT_RESOURCE_SERVLET_URL );
-                urlItem.addParameter( MARK_FILE_ID, ( document.getDocContent( ) != null && document.getDocContent( ).size() != 0) ? document.getDocContent( ).get( 0 ).getId( ) : 0 );
+                urlItem.addParameter( MARK_FILE_ID, ( document.getDocContent( ) != null && document.getDocContent( ).size( ) != 0 ) ? document.getDocContent( )
+                        .get( 0 ).getId( ) : 0 );
                 model.put( MARK_IMG_PATH, urlItem.getUrl( ) );
 
             }

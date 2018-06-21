@@ -165,8 +165,8 @@ public class NewsletterDocumentServiceJspBean extends InsertServiceJspBean imple
         Collection<Blog> list = PublishingService.getInstance( ).getPublishedDocumentsSinceDate( publishedDate, publishedDate, documentFilter, locale );
         model.put( MARK_DOCUMENT_LIST, list );
 
-        ReferenceList templateList = NewsLetterTemplateHome.getTemplatesListByType( NewsletterBlogTopicService.NEWSLETTER_DOCUMENT_TOPIC_TYPE,
-                pluginNewsletter );
+        ReferenceList templateList = NewsLetterTemplateHome
+                .getTemplatesListByType( NewsletterBlogTopicService.NEWSLETTER_DOCUMENT_TOPIC_TYPE, pluginNewsletter );
         model.put( MARK_TEMPLATES_LIST, templateList );
 
         // Replace portal path for editor and document display
