@@ -220,13 +220,13 @@ public class NewsletterBlogTopicService implements INewsletterTopicService
     @Override
     public void removeNewsletterTopic( int nNewsletterTopicId )
     {
-        // removes relationship between the topic and document list
+        // removes relationship between the topic and blog list
         NewsletterBlogHome.removeNewsLetterDocumentTags( nNewsletterTopicId, getNewsletterDocumentPlugin( ) );
 
         // removes relationship between the topic and portlets
         NewsletterBlogHome.removeNewsLetterDocumentPortlet( nNewsletterTopicId, getNewsletterDocumentPlugin( ) );
 
-        // Remove the newsletter document topic
+        // Remove the newsletter blog topic
         NewsletterBlogHome.deleteDocumentTopic( nNewsletterTopicId, getNewsletterDocumentPlugin( ) );
     }
 

@@ -1,38 +1,39 @@
 <!-- model_document template -->
 <table width="100%" cellpadding="0" cellspacing="0">
     <tr>
-    	<#if document?exists>
+    <#list blogs_list as blog>
+
         <td>
 	        <table>
 	        	<tr>
 					<td>
-						<#if img_path?exists>
-						    <img width="80" height="80" src="${img_path}"></img>
-						</#if>
-		            	<h3>${document.name}</h3>
+						<#list blog.docContent as cont>
+						    <img width="80" height="80" src="servlet/plugins/blogs/file?id_file=${cont.id}"></img>
+						</#list>
+		            	<h3>${blog.name}</h3>
 		            </td>
 		        </tr>
 		        <tr>
 		            <td>
-		                ${document.description!}
+		                ${blog.description!}
 		            </td>
 				</tr>
 				<tr>
 					<td>
-			        	<#if portlets_collec?exists>
-				   	        <#list portlets_collec as portlet>
-								<a href=${base_url}jsp/site/Portal.jsp?document_id=${document.id}&portlet_id=${portlet.id}>
-				    				${document.name}
+
+				   	        <#list blog.blogPubilcation as blogPub>
+
+								<a href=${base_url}jsp/site/Portal.jsp?pag=blog&id=${blogPub.idBlog}&portlet_id=${blogPub.idPortlet}>
+				    				${blog.name}
 				               	</a>
-							</#list>
-						</#if>
+						</#list>
+
 	       			</td>
        			</tr>
 	        </table>
         </td>
-        <#else>
-        	No documents available
-        </#if>
+        
+        </#list>
     </tr>
 </table>
 

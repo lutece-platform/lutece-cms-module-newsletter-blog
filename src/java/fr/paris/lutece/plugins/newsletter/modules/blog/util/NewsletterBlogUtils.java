@@ -37,7 +37,7 @@ public final class NewsletterBlogUtils
      *            The unsecured folder
      * @return The converted content
      */
-    public static String rewriteImgUrls( String strContent, String strBaseUrl, String strUnsecuredBaseUrl, String strUnsecuredFolderPath,
+   /* public static String rewriteImgUrls( String strContent, String strBaseUrl, String strUnsecuredBaseUrl, String strUnsecuredFolderPath,
             String strUnsecuredFolder )
     {
         if ( strContent == null )
@@ -49,7 +49,7 @@ public final class NewsletterBlogUtils
         doc.convertUrlsToUnsecuredUrls( BlogNewsletterDocument.ELEMENT_A, strUnsecuredBaseUrl, strUnsecuredFolderPath, strUnsecuredFolder );
 
         return doc.getContent( );
-    }
+    }*/
 
     /**
      * Get the string representation of an integer with a specified number of digits.

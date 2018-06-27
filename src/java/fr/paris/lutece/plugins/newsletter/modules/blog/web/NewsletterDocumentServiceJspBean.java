@@ -64,13 +64,16 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.ArrayUtils;
 
 /**
  * This class is responsible for the insertion of document lists in the newsletter.
@@ -216,6 +219,7 @@ public class NewsletterDocumentServiceJspBean extends InsertServiceJspBean imple
 
         int nTemplateId = Integer.parseInt( strTemplateId );
         String [ ] strDocumentsIdsList = request.getParameterValues( PARAMETER_DOCUMENTS_LIST );
+        int [] documentsIdList= Stream.of(strDocumentsIdsList).mapToInt(Integer::parseInt).toArray();
 
         if ( ( strDocumentsIdsList == null ) )
         {
@@ -223,21 +227,18 @@ public class NewsletterDocumentServiceJspBean extends InsertServiceJspBean imple
         }
 
         Locale locale = AdminUserService.getLocale( request );
-        Collection<String> documentsList = new ArrayList<String>( );
 
         // retrieves the html template in order to use it to display the list of documents
         String strPathDocumentTemplate = NewsletterUtils.getHtmlTemplatePath( nTemplateId, pluginNewsletter );
-
-        for ( int i = 0; i < strDocumentsIdsList.length; i++ )
-        {
-            int nDocumentId = Integer.parseInt( strDocumentsIdsList [i] );
-            Blog document = BlogService.getInstance( ).findByPrimaryKeyWithoutBinaries( nDocumentId );
-            String strDocumentHtmlCode = NewsletterBlogService.getInstance( ).fillTemplateWithDocumentInfos( strPathDocumentTemplate, document, locale,
+               
+        BlogFilter documentFilter = new BlogFilter( );
+        documentFilter.setIds( ArrayUtils.toObject( documentsIdList ) );
+        List<Blog> blogList = BlogService.getInstance().findByFilter( documentFilter );
+          
+        String strDocumentHtmlCode = NewsletterBlogService.getInstance( ).fillTemplateWithDocumentInfos( strPathDocumentTemplate, blogList, locale,
                     strBaseUrl, AdminUserService.getAdminUser( request ) );
-            documentsList.add( strDocumentHtmlCode );
-        }
-
-        model.put( MARK_DOCUMENTS_LIST, documentsList );
+       
+        model.put( MARK_DOCUMENTS_LIST, strDocumentHtmlCode );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_INSERT_DOCEMENTS, locale, model );
         template.substitute( NewsLetterConstants.WEBAPP_PATH_FOR_LINKSERVICE, strBaseUrl );
@@ -245,13 +246,13 @@ public class NewsletterDocumentServiceJspBean extends InsertServiceJspBean imple
         String strContent = template.getHtml( );
 
         // We check if we need to unsecure files of the document to include them as links in the content
-        if ( _newsletterService.useUnsecuredImages( ) )
+       /* if ( _newsletterService.useUnsecuredImages( ) )
         {
             String strUnsecuredFolder = _newsletterService.getUnsecuredImagefolder( );
             String strUnsecuredFolderPath = _newsletterService.getUnsecuredFolderPath( );
             strContent = NewsletterBlogUtils.rewriteImgUrls( strContent, AppPathService.getBaseUrl( ), _newsletterService.getUnsecuredWebappUrl( ),
                     strUnsecuredFolderPath, strUnsecuredFolder );
-        }
+        }*/
 
         return insertUrl( request, strInput, StringEscapeUtils.escapeJavaScript( strContent ) );
     }

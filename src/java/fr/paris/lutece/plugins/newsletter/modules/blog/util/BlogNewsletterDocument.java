@@ -48,7 +48,7 @@ public class BlogNewsletterDocument extends HtmlDomDocNewsletter
      * @param strUnsecuredFolder
      *            The unsecured folder
      */
-    public void convertUrlsToUnsecuredUrls( ElementUrl elementType, String strUnsecuredBaseUrl, String strUnsecuredFolderPath, String strUnsecuredFolder )
+    /* public void convertUrlsToUnsecuredUrls( ElementUrl elementType, String strUnsecuredBaseUrl, String strUnsecuredFolderPath, String strUnsecuredFolder )
     {
         NodeList nodes = getDomDocument( ).getElementsByTagName( elementType.getTagName( ) );
 
@@ -99,5 +99,5 @@ public class BlogNewsletterDocument extends HtmlDomDocNewsletter
                 }
             }
         }
-    }
+    }*/
 }
