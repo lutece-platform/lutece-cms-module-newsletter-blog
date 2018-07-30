@@ -161,10 +161,9 @@ public class NewsletterDocumentServiceJspBean extends InsertServiceJspBean imple
 
         // Document list
         BlogFilter documentFilter = new BlogFilter( );
-        Integer tableauEntier [ ] = {
-            nDocumentTagId
-        };
-        documentFilter.setTagsId( tableauEntier );
+        if(nDocumentTagId != 0){
+        	documentFilter.setPortletId( nDocumentTagId );
+        }
         Collection<Blog> list = PublishingService.getInstance( ).getPublishedBlogsSinceDate( publishedDate, publishedDate, documentFilter, locale );
         model.put( MARK_DOCUMENT_LIST, list );
 

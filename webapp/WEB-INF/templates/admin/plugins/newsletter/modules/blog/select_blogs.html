@@ -3,7 +3,7 @@
 <form class="form-horizontal" method="post" action="jsp/admin/plugins/newsletter/modules/blog/DoSearchDocuments.jsp">
 	<fieldset>
 		<legend>#i18n{module.newsletter.blog.select_documents.labelSearchCriteria}</legend>
-	    <input type="hidden" name="input" value="${input}" />
+	    <input type="hidden" name="input" value="${.data_model.input!}" />
 	   	<div class="form-group">
 			<label class="control-label col-xs-12 col-sm-2 col-md-2" for="document_list_id">#i18n{module.newsletter.blog.select_documents.labelDocumentListCollection} *</label>
 			<div class="col-xs-12 col-sm-10 col-md-10">
@@ -27,24 +27,28 @@
 <form class="form-horizontal" method="post" action="jsp/admin/plugins/newsletter/modules/blog/DoInsertDocuments.jsp" name="insertDocuments" >
 	<fieldset>
 		<legend>#i18n{module.newsletter.blog.select_documents.labelDocumentList}</legend>
-	    <input type="hidden" name="input" value="${input}" />
+	    <input type="hidden" name="input" value="${.data_model.input!}" />
 	    <table class="table table-striped table-condensed">
 			<tr>
 	            <th></th>
 	            <th>#i18n{module.newsletter.blog.select_documents.labelDocumentDate}</th>
 	            <th>#i18n{module.newsletter.blog.select_documents.labelDocumentAdd}</th>
 	        </tr>
+		<#if document_list??>
 	        <#list document_list as document>
 	        <tr>
-	            <td>${document.title}</td>
-	            <td>${document.dateModification}</td>
+	            <td>${document.name!}</td>
+	            <td>${document.updateDate!}</td>
 	            <td>
 					<input name="documents_list" value="${document.id}" class="checkbox" type="checkbox">
 				</td>
 	        </tr>
 	        </#list>
+		</#if>
 	    </table>
-	    <@comboWithParams name="template_id" default_value=0 additionalParameters=" class=\"form-control\"" items=documents_templates_list />
+	    <@comboWithParams name="template_id" default_value="" additionalParameters="class=\"form-control\"" items=documents_templates_list />
+
+	
 		<button class="btn btn-primary btn-xs btn-flat" type="submit">
 			#i18n{module.newsletter.blog.select_documents.buttonValidate}
 		</button>
