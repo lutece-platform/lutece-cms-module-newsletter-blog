@@ -1,5 +1,8 @@
 package fr.paris.lutece.plugins.newsletter.modules.blog.service;
 
+import fr.paris.lutece.plugins.blog.business.portlet.BlogListPortlet;
+import fr.paris.lutece.plugins.blog.business.portlet.BlogListPortletHome;
+import fr.paris.lutece.plugins.blog.service.PublishingService;
 import fr.paris.lutece.plugins.newsletter.business.NewsLetter;
 import fr.paris.lutece.plugins.newsletter.business.NewsLetterHome;
 import fr.paris.lutece.plugins.newsletter.business.NewsLetterTemplate;
@@ -11,6 +14,8 @@ import fr.paris.lutece.plugins.newsletter.service.NewsletterPlugin;
 import fr.paris.lutece.plugins.newsletter.service.NewsletterService;
 import fr.paris.lutece.plugins.newsletter.service.topic.INewsletterTopicService;
 import fr.paris.lutece.plugins.newsletter.util.NewsletterUtils;
+import fr.paris.lutece.portal.business.portlet.Portlet;
+import fr.paris.lutece.portal.business.portlet.PortletTypeHome;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
@@ -20,6 +25,7 @@ import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -53,6 +59,7 @@ public class NewsletterBlogTopicService implements INewsletterTopicService
     // MARKS
     private static final String MARK_CATEGORY_LIST = "category_list";
     private static final String MARK_DOCUMENT_LIST_PORTLETS = "document_list_portlets";
+    private static final String MARK_LIST_PORTLETS_ASSOCIATED_TOPIC = "portlets_associated_topic";
     private static final String MARK_TEMPLATES_LIST = "templates_list";
     private static final String MARK_NEWSLETTER_DOCUMENT = "newsletterDocument";
     private static final String MARK_IMG_PATH = "img_path";
@@ -118,16 +125,31 @@ public class NewsletterBlogTopicService implements INewsletterTopicService
         listCategoryList.checkItems( strSelectedCategoryList );
 
         // We get the list of document list portlets containing published documents
-        ReferenceList listDocumentPortlets = NewsletterBlogService.getInstance( ).getPortletBlogList( );
+       // ReferenceList listDocumentPortlets = NewsletterBlogService.getInstance( ).getPortletBlogList( );
+        
+        List<Portlet> listDocumentPortlets= new ArrayList<Portlet>();
+        String className = BlogListPortletHome.class.getName( );
+        String strPortletTypeId = PortletTypeHome.getPortletTypeId( className );
+
+        for ( Portlet pt : PublishingService.getInstance( ).getBlogsPortlets( ) )
+        {
+
+            if ( pt.getPortletTypeId( ).equals( strPortletTypeId ) )
+            {
+            	listDocumentPortlets.add(pt);
+            }
+
+        }
+        
         int [ ] arrayPortletIds = NewsletterBlogHome.findNewsletterPortletsIds( newsletterTopic.getId( ), getNewsletterDocumentPlugin( ) );
-        String [ ] strSelectedPortlets = new String [ arrayPortletIds.length];
+      /*  String [ ] strSelectedPortlets = new String [ arrayPortletIds.length];
 
         for ( int i = 0; i < arrayPortletIds.length; i++ )
         {
             strSelectedPortlets [i] = String.valueOf( arrayPortletIds [i] );
-        }
+        }*/
         // We check portlets associated with this topic
-        listDocumentPortlets.checkItems( strSelectedPortlets );
+      //  listDocumentPortlets.checkItems( strSelectedPortlets );
 
         NewsletterBlog newsletterDocument = NewsletterBlogHome.findByPrimaryKey( newsletterTopic.getId( ), getNewsletterDocumentPlugin( ) );
 
@@ -135,6 +157,8 @@ public class NewsletterBlogTopicService implements INewsletterTopicService
 
         model.put( MARK_CATEGORY_LIST, listCategoryList );
         model.put( MARK_DOCUMENT_LIST_PORTLETS, listDocumentPortlets );
+        model.put( MARK_LIST_PORTLETS_ASSOCIATED_TOPIC, arrayPortletIds );
+
         model.put( MARK_NEWSLETTER_DOCUMENT, newsletterDocument );
         model.put( MARK_TEMPLATES_LIST, NewsLetterTemplateHome.getTemplatesCollectionByType( NEWSLETTER_DOCUMENT_TOPIC_TYPE, getNewsletterPlugin( ) ) );
         model.put( MARK_IMG_PATH, strPathImageTemplate );

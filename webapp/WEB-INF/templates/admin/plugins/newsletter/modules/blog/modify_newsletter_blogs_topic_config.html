@@ -34,10 +34,10 @@
 		<#if document_list_portlets?has_content>
 			<select multiple="multiple" class="form-control" id="portlets_id" name="portlets_id" onchange="javascript:clearSelection(document.getElementById('category_list_id'));$('#use_portlets').attr('checked', true);">
 				<#list document_list_portlets as item>
-					<#if item.checked>
-						<option selected="selected" value="${item.code}" title="${item.name}">${item.name}</option>
+					<#if portlets_associated_topic?seq_contains(item.id)>
+						<option selected="selected" value="${item.id}" title="${item.name}">${item.name}</option>
 					<#else>
-						<option value="${item.code}" title="${item.name}">${item.name}</option>
+						<option value="${item.id}" title="${item.name}">${item.name}</option>
 					</#if>
 				</#list>
 			</select>
