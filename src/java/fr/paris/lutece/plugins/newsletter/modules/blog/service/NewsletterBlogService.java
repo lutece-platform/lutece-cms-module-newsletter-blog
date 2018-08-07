@@ -33,7 +33,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -168,8 +167,7 @@ public class NewsletterBlogService
             if ( arrayPortletsIds != null && arrayPortletsIds.length > 0 )
             {
                 Plugin documentPlugin = PluginService.getPlugin( BlogPlugin.PLUGIN_NAME );
-                List<Integer> listDocumentIds = NewsletterBlogHome.getPublishedDocumentsIdsListByPortletIds( arrayPortletsIds, dateStartPublishing, dateEndPublishing,
-                        documentPlugin );
+                List<Integer> listDocumentIds = PublishingService.getLastPublishedBlogsIdsListByPortletIds( arrayPortletsIds, datePublishing, documentPlugin );
                 if ( listDocumentIds != null && listDocumentIds.size( ) > 0 )
                 {
                     Integer [ ] arrayDocumentsId = new Integer [ listDocumentIds.size( )];
