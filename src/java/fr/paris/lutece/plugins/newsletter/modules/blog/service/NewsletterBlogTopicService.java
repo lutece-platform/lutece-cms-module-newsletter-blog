@@ -310,4 +310,21 @@ public class NewsletterBlogTopicService implements INewsletterTopicService
         return _newsletterPlugin;
     }
 
+    @Override
+    public void copyNewsletterTopic(int oldTopicId, NewsletterTopic newsletterTopic, AdminUser user, Locale locale) {
+    	NewsletterBlog oldNewsletterBolg = NewsletterBlogHome.findByPrimaryKey(oldTopicId, getNewsletterDocumentPlugin());
+    	
+    	 NewsletterBlog topic = new NewsletterBlog( );
+         topic.setId( newsletterTopic.getId( ) );
+         if (oldNewsletterBolg != null) {
+        	 topic.setIdTemplate( oldNewsletterBolg.getIdTemplate() );
+         } else {
+        	 topic.setIdTemplate( 0 );
+         }
+         topic.setUseDocumentTags( true );
+         NewsletterBlogHome.createDocumentTopic( topic, getNewsletterDocumentPlugin( ) );
+         NewsletterBlogHome.associateNewsLetterDocumentCategory( newsletterTopic.getId( ), Integer.parseInt( CONSTANT_UNCATEGORIZED_DOCUMENTS_KEY ),
+                 getNewsletterDocumentPlugin( ) );
+    	
+    }
 }
