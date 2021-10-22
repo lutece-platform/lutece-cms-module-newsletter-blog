@@ -1,3 +1,36 @@
+/*
+ * Copyright (c) 2002-2021, City of Paris
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *  1. Redistributions of source code must retain the above copyright notice
+ *     and the following disclaimer.
+ *
+ *  2. Redistributions in binary form must reproduce the above copyright notice
+ *     and the following disclaimer in the documentation and/or other materials
+ *     provided with the distribution.
+ *
+ *  3. Neither the name of 'Mairie de Paris' nor 'Lutece' nor the names of its
+ *     contributors may be used to endorse or promote products derived from
+ *     this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * License 1.0
+ */
 package fr.paris.lutece.plugins.newsletter.modules.blog.service;
 
 import fr.paris.lutece.plugins.blog.business.portlet.BlogListPortlet;
@@ -125,9 +158,9 @@ public class NewsletterBlogTopicService implements INewsletterTopicService
         listCategoryList.checkItems( strSelectedCategoryList );
 
         // We get the list of document list portlets containing published documents
-       // ReferenceList listDocumentPortlets = NewsletterBlogService.getInstance( ).getPortletBlogList( );
-        
-        List<Portlet> listDocumentPortlets= new ArrayList<Portlet>();
+        // ReferenceList listDocumentPortlets = NewsletterBlogService.getInstance( ).getPortletBlogList( );
+
+        List<Portlet> listDocumentPortlets = new ArrayList<Portlet>( );
         String className = BlogListPortletHome.class.getName( );
         String strPortletTypeId = PortletTypeHome.getPortletTypeId( className );
 
@@ -136,20 +169,19 @@ public class NewsletterBlogTopicService implements INewsletterTopicService
 
             if ( pt.getPortletTypeId( ).equals( strPortletTypeId ) )
             {
-            	listDocumentPortlets.add(pt);
+                listDocumentPortlets.add( pt );
             }
 
         }
-        
-        int [ ] arrayPortletIds = NewsletterBlogHome.findNewsletterPortletsIds( newsletterTopic.getId( ), getNewsletterDocumentPlugin( ) );
-      /*  String [ ] strSelectedPortlets = new String [ arrayPortletIds.length];
 
-        for ( int i = 0; i < arrayPortletIds.length; i++ )
-        {
-            strSelectedPortlets [i] = String.valueOf( arrayPortletIds [i] );
-        }*/
+        int [ ] arrayPortletIds = NewsletterBlogHome.findNewsletterPortletsIds( newsletterTopic.getId( ), getNewsletterDocumentPlugin( ) );
+        /*
+         * String [ ] strSelectedPortlets = new String [ arrayPortletIds.length];
+         * 
+         * for ( int i = 0; i < arrayPortletIds.length; i++ ) { strSelectedPortlets [i] = String.valueOf( arrayPortletIds [i] ); }
+         */
         // We check portlets associated with this topic
-      //  listDocumentPortlets.checkItems( strSelectedPortlets );
+        // listDocumentPortlets.checkItems( strSelectedPortlets );
 
         NewsletterBlog newsletterDocument = NewsletterBlogHome.findByPrimaryKey( newsletterTopic.getId( ), getNewsletterDocumentPlugin( ) );
 
@@ -311,20 +343,24 @@ public class NewsletterBlogTopicService implements INewsletterTopicService
     }
 
     @Override
-    public void copyNewsletterTopic(int oldTopicId, NewsletterTopic newsletterTopic, AdminUser user, Locale locale) {
-    	NewsletterBlog oldNewsletterBolg = NewsletterBlogHome.findByPrimaryKey(oldTopicId, getNewsletterDocumentPlugin());
-    	
-    	 NewsletterBlog topic = new NewsletterBlog( );
-         topic.setId( newsletterTopic.getId( ) );
-         if (oldNewsletterBolg != null) {
-        	 topic.setIdTemplate( oldNewsletterBolg.getIdTemplate() );
-         } else {
-        	 topic.setIdTemplate( 0 );
-         }
-         topic.setUseDocumentTags( true );
-         NewsletterBlogHome.createDocumentTopic( topic, getNewsletterDocumentPlugin( ) );
-         NewsletterBlogHome.associateNewsLetterDocumentCategory( newsletterTopic.getId( ), Integer.parseInt( CONSTANT_UNCATEGORIZED_DOCUMENTS_KEY ),
-                 getNewsletterDocumentPlugin( ) );
-    	
+    public void copyNewsletterTopic( int oldTopicId, NewsletterTopic newsletterTopic, AdminUser user, Locale locale )
+    {
+        NewsletterBlog oldNewsletterBolg = NewsletterBlogHome.findByPrimaryKey( oldTopicId, getNewsletterDocumentPlugin( ) );
+
+        NewsletterBlog topic = new NewsletterBlog( );
+        topic.setId( newsletterTopic.getId( ) );
+        if ( oldNewsletterBolg != null )
+        {
+            topic.setIdTemplate( oldNewsletterBolg.getIdTemplate( ) );
+        }
+        else
+        {
+            topic.setIdTemplate( 0 );
+        }
+        topic.setUseDocumentTags( true );
+        NewsletterBlogHome.createDocumentTopic( topic, getNewsletterDocumentPlugin( ) );
+        NewsletterBlogHome.associateNewsLetterDocumentCategory( newsletterTopic.getId( ), Integer.parseInt( CONSTANT_UNCATEGORIZED_DOCUMENTS_KEY ),
+                getNewsletterDocumentPlugin( ) );
+
     }
 }

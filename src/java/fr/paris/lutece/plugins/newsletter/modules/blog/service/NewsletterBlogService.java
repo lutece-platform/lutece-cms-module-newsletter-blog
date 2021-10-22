@@ -1,3 +1,36 @@
+/*
+ * Copyright (c) 2002-2021, City of Paris
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *  1. Redistributions of source code must retain the above copyright notice
+ *     and the following disclaimer.
+ *
+ *  2. Redistributions in binary form must reproduce the above copyright notice
+ *     and the following disclaimer in the documentation and/or other materials
+ *     provided with the distribution.
+ *
+ *  3. Neither the name of 'Mairie de Paris' nor 'Lutece' nor the names of its
+ *     contributors may be used to endorse or promote products derived from
+ *     this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * License 1.0
+ */
 package fr.paris.lutece.plugins.newsletter.modules.blog.service;
 
 import fr.paris.lutece.plugins.blog.business.Blog;
@@ -72,53 +105,24 @@ public class NewsletterBlogService
      *            the destination folder
      * @return name of the copy file or null if there is no copied file
      */
-  /*  public String copyFileFromDocument( Blog document, String strFileType, String strDestFolderPath )
-    {
-        String strFileName = null;
-
-        if ( document.getDocContent( ).size( ) == 0 )
-        {
-
-            return strFileName;
-        }
-        // get the first file
-        DocContent docContent = document.getDocContent( ).get( 0 );
-        byte [ ] tabByte = docContent.getBinaryValue( );
-        strFileName = NewsletterBlogUtils.formatInteger( document.getId( ), 5 ) + NewsletterBlogUtils.formatInteger( docContent.getId( ), 5 )
-                + NewsletterBlogUtils.formatInteger( 1, 5 ) + FULLSTOP + StringUtils.substringAfterLast( docContent.getTextValue( ), FULLSTOP );
-
-        FileOutputStream fos = null;
-
-        try
-        {
-            File file = new File( strDestFolderPath );
-            if ( !file.exists( ) )
-            {
-                if ( !file.mkdir( ) )
-                {
-                    throw new IOException( );
-                }
-            }
-
-            file = new File( strDestFolderPath + strFileName );
-            fos = new FileOutputStream( file );
-            IOUtils.write( tabByte, fos );
-        }
-        catch( IOException e )
-        {
-            AppLogService.error( e );
-        }
-        catch( Exception e )
-        {
-            AppLogService.error( e );
-        }
-        finally
-        {
-            IOUtils.closeQuietly( fos );
-        }
-
-        return strFileName;
-    }*/
+    /*
+     * public String copyFileFromDocument( Blog document, String strFileType, String strDestFolderPath ) { String strFileName = null;
+     * 
+     * if ( document.getDocContent( ).size( ) == 0 ) {
+     * 
+     * return strFileName; } // get the first file DocContent docContent = document.getDocContent( ).get( 0 ); byte [ ] tabByte = docContent.getBinaryValue( );
+     * strFileName = NewsletterBlogUtils.formatInteger( document.getId( ), 5 ) + NewsletterBlogUtils.formatInteger( docContent.getId( ), 5 ) +
+     * NewsletterBlogUtils.formatInteger( 1, 5 ) + FULLSTOP + StringUtils.substringAfterLast( docContent.getTextValue( ), FULLSTOP );
+     * 
+     * FileOutputStream fos = null;
+     * 
+     * try { File file = new File( strDestFolderPath ); if ( !file.exists( ) ) { if ( !file.mkdir( ) ) { throw new IOException( ); } }
+     * 
+     * file = new File( strDestFolderPath + strFileName ); fos = new FileOutputStream( file ); IOUtils.write( tabByte, fos ); } catch( IOException e ) {
+     * AppLogService.error( e ); } catch( Exception e ) { AppLogService.error( e ); } finally { IOUtils.closeQuietly( fos ); }
+     * 
+     * return strFileName; }
+     */
 
     /**
      * Generate the html code for documents corresponding to the documents associated with the topic and to a given publishing date
@@ -146,7 +150,7 @@ public class NewsletterBlogService
         GregorianCalendar calendar = new java.util.GregorianCalendar( );
         Date dateEndPublishing = new Date( calendar.getTimeInMillis( ) );
         Date dateStartPublishing = new Date( datePublishing.getTime( ) + 86400000 );
-        
+
         if ( strTemplatePath == null )
         {
             return null;
@@ -178,21 +182,19 @@ public class NewsletterBlogService
                         nIndex++;
                     }
                     documentFilter.setIds( arrayDocumentsId );
-                    //documentFilter.setLoadBinaries( true );
-                    listBlogs = BlogService.getInstance().findByFilter( documentFilter );
+                    // documentFilter.setLoadBinaries( true );
+                    listBlogs = BlogService.getInstance( ).findByFilter( documentFilter );
                 }
             }
         }
 
-        if ( listBlogs == null || listBlogs.size() == 0)
+        if ( listBlogs == null || listBlogs.size( ) == 0 )
         {
             return StringUtils.EMPTY;
         }
 
-
         String strContent = fillTemplateWithDocumentInfos( strTemplatePath, listBlogs, locale, strBaseUrl, user );
-            
-       
+
         return strContent;
     }
 
@@ -213,39 +215,39 @@ public class NewsletterBlogService
      */
     public String fillTemplateWithDocumentInfos( String strTemplatePath, Collection<Blog> listBlogs, Locale locale, String strBaseUrl, AdminUser user )
     {
-    	Collection<Portlet> porletCollec= null;
+        Collection<Portlet> porletCollec = null;
         Map<String, Object> model = new HashMap<String, Object>( );
-        Collection<Blog> listBlogAuthorized= new ArrayList<Blog>();
-        
-    	for( Blog blog: listBlogs){
-    		
-    		 porletCollec = PublishingService.getInstance( ).getPortletsByBlogId( Integer.toString( blog.getId( ) ) );	
-    		 porletCollec = PortletService.getInstance( ).getAuthorizedPortletCollection( porletCollec, user );
+        Collection<Blog> listBlogAuthorized = new ArrayList<Blog>( );
 
-       
-        // the document insert in the buffer must be publish in a authorized portlet
-        if ( porletCollec.size( ) > 0 )
+        for ( Blog blog : listBlogs )
         {
-            
-            String strProdUrl = AppPathService.getProdUrl( strBaseUrl );          
-            model.put( MARK_PROD_URL, strProdUrl );
 
-            
-            Blog blg= BlogService.getInstance().loadBlog( blog.getId( ));
-        	listBlogAuthorized.add( blg );
+            porletCollec = PublishingService.getInstance( ).getPortletsByBlogId( Integer.toString( blog.getId( ) ) );
+            porletCollec = PortletService.getInstance( ).getAuthorizedPortletCollection( porletCollec, user );
+
+            // the document insert in the buffer must be publish in a authorized portlet
+            if ( porletCollec.size( ) > 0 )
+            {
+
+                String strProdUrl = AppPathService.getProdUrl( strBaseUrl );
+                model.put( MARK_PROD_URL, strProdUrl );
+
+                Blog blg = BlogService.getInstance( ).loadBlog( blog.getId( ) );
+                listBlogAuthorized.add( blg );
+            }
         }
-    	}
-    	
-    	if( listBlogAuthorized.size() != 0 ){
-    		
-	    	model.put( MARK_LIST_BLOG, listBlogAuthorized );
-	        model.put( NewsLetterConstants.MARK_BASE_URL, strBaseUrl );
-	
-	        HtmlTemplate template = AppTemplateService.getTemplate( strTemplatePath, locale, model );
-	
-	        return template.getHtml( );
-    	}
-    	
+
+        if ( listBlogAuthorized.size( ) != 0 )
+        {
+
+            model.put( MARK_LIST_BLOG, listBlogAuthorized );
+            model.put( NewsLetterConstants.MARK_BASE_URL, strBaseUrl );
+
+            HtmlTemplate template = AppTemplateService.getTemplate( strTemplatePath, locale, model );
+
+            return template.getHtml( );
+        }
+
         return StringUtils.EMPTY;
     }
 

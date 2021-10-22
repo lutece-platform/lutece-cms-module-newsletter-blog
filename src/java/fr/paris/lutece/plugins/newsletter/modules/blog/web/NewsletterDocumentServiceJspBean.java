@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2014, Mairie de Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -161,14 +161,15 @@ public class NewsletterDocumentServiceJspBean extends InsertServiceJspBean imple
 
         // Document list
         BlogFilter documentFilter = new BlogFilter( );
-        if(nDocumentTagId != 0){
-        	documentFilter.setPortletId( nDocumentTagId );
+        if ( nDocumentTagId != 0 )
+        {
+            documentFilter.setPortletId( nDocumentTagId );
         }
         Collection<Blog> list = PublishingService.getInstance( ).getPublishedBlogsSinceDate( publishedDate, publishedDate, documentFilter, locale );
         model.put( MARK_DOCUMENT_LIST, list );
 
-        ReferenceList templateList = NewsLetterTemplateHome
-                .getTemplatesListByType( NewsletterBlogTopicService.NEWSLETTER_DOCUMENT_TOPIC_TYPE, pluginNewsletter );
+        ReferenceList templateList = NewsLetterTemplateHome.getTemplatesListByType( NewsletterBlogTopicService.NEWSLETTER_DOCUMENT_TOPIC_TYPE,
+                pluginNewsletter );
         model.put( MARK_TEMPLATES_LIST, templateList );
 
         // Replace portal path for editor and document display
@@ -218,7 +219,7 @@ public class NewsletterDocumentServiceJspBean extends InsertServiceJspBean imple
 
         int nTemplateId = Integer.parseInt( strTemplateId );
         String [ ] strDocumentsIdsList = request.getParameterValues( PARAMETER_DOCUMENTS_LIST );
-        int [] documentsIdList= Stream.of(strDocumentsIdsList).mapToInt(Integer::parseInt).toArray();
+        int [ ] documentsIdList = Stream.of( strDocumentsIdsList ).mapToInt( Integer::parseInt ).toArray( );
 
         if ( ( strDocumentsIdsList == null ) )
         {
@@ -229,14 +230,14 @@ public class NewsletterDocumentServiceJspBean extends InsertServiceJspBean imple
 
         // retrieves the html template in order to use it to display the list of documents
         String strPathDocumentTemplate = NewsletterUtils.getHtmlTemplatePath( nTemplateId, pluginNewsletter );
-               
+
         BlogFilter documentFilter = new BlogFilter( );
         documentFilter.setIds( ArrayUtils.toObject( documentsIdList ) );
-        List<Blog> blogList = BlogService.getInstance().findByFilter( documentFilter );
-          
-        String strDocumentHtmlCode = NewsletterBlogService.getInstance( ).fillTemplateWithDocumentInfos( strPathDocumentTemplate, blogList, locale,
-                    strBaseUrl, AdminUserService.getAdminUser( request ) );
-       
+        List<Blog> blogList = BlogService.getInstance( ).findByFilter( documentFilter );
+
+        String strDocumentHtmlCode = NewsletterBlogService.getInstance( ).fillTemplateWithDocumentInfos( strPathDocumentTemplate, blogList, locale, strBaseUrl,
+                AdminUserService.getAdminUser( request ) );
+
         model.put( MARK_DOCUMENTS_LIST, strDocumentHtmlCode );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_INSERT_DOCEMENTS, locale, model );
@@ -245,13 +246,11 @@ public class NewsletterDocumentServiceJspBean extends InsertServiceJspBean imple
         String strContent = template.getHtml( );
 
         // We check if we need to unsecure files of the document to include them as links in the content
-       /* if ( _newsletterService.useUnsecuredImages( ) )
-        {
-            String strUnsecuredFolder = _newsletterService.getUnsecuredImagefolder( );
-            String strUnsecuredFolderPath = _newsletterService.getUnsecuredFolderPath( );
-            strContent = NewsletterBlogUtils.rewriteImgUrls( strContent, AppPathService.getBaseUrl( ), _newsletterService.getUnsecuredWebappUrl( ),
-                    strUnsecuredFolderPath, strUnsecuredFolder );
-        }*/
+        /*
+         * if ( _newsletterService.useUnsecuredImages( ) ) { String strUnsecuredFolder = _newsletterService.getUnsecuredImagefolder( ); String
+         * strUnsecuredFolderPath = _newsletterService.getUnsecuredFolderPath( ); strContent = NewsletterBlogUtils.rewriteImgUrls( strContent,
+         * AppPathService.getBaseUrl( ), _newsletterService.getUnsecuredWebappUrl( ), strUnsecuredFolderPath, strUnsecuredFolder ); }
+         */
 
         return insertUrl( request, strInput, StringEscapeUtils.escapeJavaScript( strContent ) );
     }
