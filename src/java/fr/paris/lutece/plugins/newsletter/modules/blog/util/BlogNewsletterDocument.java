@@ -6,7 +6,7 @@ import fr.paris.lutece.plugins.newsletter.modules.blog.service.NewsletterBlogSer
 import fr.paris.lutece.plugins.newsletter.util.HtmlDomDocNewsletter;
 import fr.paris.lutece.plugins.newsletter.util.NewsLetterConstants;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;

@@ -1,6 +1,6 @@
 package fr.paris.lutece.plugins.newsletter.modules.blog.util;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Utility class for newsletter document
