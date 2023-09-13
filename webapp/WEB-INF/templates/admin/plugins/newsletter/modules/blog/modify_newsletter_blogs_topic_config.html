@@ -1,78 +1,67 @@
-<div class="form-group">
-	<label class="control-label col-xs-12 col-sm-2 col-md-2" for="use_categories">#i18n{module.newsletter.blog.modify_document_topic.useCategories} *</label>
-	<div class="col-xs-12 col-sm-10 col-md-10">
-		<label class="radio-inline">
-			<input type="radio"  id="use_categories" name="use_categories" value="true" <#if newsletterDocument.useDocumentTags>checked="checked"</#if>> #i18n{module.newsletter.blog.modify_document_topic.radioUseTags}
-		</label>
-		<label class="radio-inline">
-			<input type="radio" id="use_portlets" name="use_categories" value="false" <#if !newsletterDocument.useDocumentTags>checked="checked"</#if>>#i18n{module.newsletter.blog.modify_document_topic.radioUsePortlets}
-		</label>
-		<p class="help-text">#i18n{module.newsletter.blogs.modify_document_topic.useCategoriesHelp}</p>
-	</div>
-</div>
-<div id="category" class="form-group">
-	<label class="control-label col-xs-12 col-sm-2 col-md-2" for="category_list_id">#i18n{module.newsletter.blog.modify_document_topic.categoryList} *</label>
-	<div class="col-xs-12 col-sm-10 col-md-10">
-		<#if category_list?has_content>
-			<select multiple="multiple" class="form-control" id="category_list_id" name="category_list_id" onchange="javascript:clearSelection(document.getElementById('portlets_id'));$('#use_categories').attr('checked', true);" >
-				<#list category_list as item>
-					<#if item.checked>
-						<option selected="selected" value="${item.code}" title="${item.name}">${item.name}</option>
-					<#else>
-						<option value="${item.code}" title="${item.name}">${item.name}</option>
-					</#if>
-				</#list>
-			</select>
-		<#else>
-			#i18n{module.newsletter.blog.modify_document_topic.labelNoCategory}
-		</#if>
-	</div>
-</div>
-<div id="document" class="form-group">
-	<label class="control-label col-xs-12 col-sm-2 col-md-2" for="portlets_id">#i18n{module.newsletter.blog.modify_document_topic.portletList} *</label>
-	<div class="col-xs-12 col-sm-10 col-md-10">
-		<#if document_list_portlets?has_content>
-			<select multiple="multiple" class="form-control" id="portlets_id" name="portlets_id" onchange="javascript:clearSelection(document.getElementById('category_list_id'));$('#use_portlets').attr('checked', true);">
-				<#list document_list_portlets as item>
-					<#if portlets_associated_topic?seq_contains(item.id)>
-						<option selected="selected" value="${item.id}" title="${item.name}">${item.name}</option>
-					<#else>
-						<option value="${item.id}" title="${item.name}">${item.name}</option>
-					</#if>
-				</#list>
-			</select>
-		<#else>
-			#i18n{module.newsletter.document.modify_document_topic.labelNoPortlet}
-		</#if>
-	</div>
-</div>
-<div class="form-group">
-	<label class="control-label col-xs-12 col-sm-2 col-md-2" for="template_id">#i18n{module.newsletter.blog.modify_document_topic.templatesList} *:</label>
-	<div class="col-xs-12 col-sm-10 col-md-10">
-		<#if templates_list?has_content>
+<@row>
+	<@columns sm=6>
+	<@tabs>
+		<@tabList>
+			<@tabLink active=true href='#use_categories' title='#i18n{module.newsletter.blog.modify_document_topic.radioUseCategories}' />
+			<@tabLink href='#use_portlets' title='#i18n{module.newsletter.blog.modify_document_topic.radioUsePortlets}' />
+		</@tabList>
+		<@tabContent>
+			<@tabPanel id='use_categories' active=true >
+			<#if category_list?has_content>
+				<@formGroup labelFor='category_list_id' labelKey='#i18n{module.newsletter.blog.modify_document_topic.categoryList}'>
+					<@select name='category_list_id' multiple=20 >
+					<#list category_list as item>
+						<@option value=item.code label=item.name selected=item.checked />
+					</#list>
+					</@select>
+				</@formGroup> 	
+			<#else>
+				<@empty title='#i18n{module.newsletter.blog.modify_document_topic.labelNoCategory}' subtitle=' ' />
+			</#if>
+			</@tabPanel>
+			<@tabPanel id='use_portlets'>
+			<#if document_list_portlets?has_content>
+				<@formGroup labelFor='portlets_id' labelKey='#i18n{module.newsletter.blog.modify_document_topic.portletList}'>
+					<@select name='portlets_id' multiple=20 >
+						<#list document_list_portlets as item>
+							<@option value=item.id label=item.name selected=portlets_associated_topic?seq_contains(item.id) />
+						</#list>
+					</@select>
+				</@formGroup> 		
+			<#else>
+				<@empty title='#i18n{module.newsletter.document.modify_document_topic.labelNoPortlet}' subtitle=' ' />
+			</#if>
+			</@tabPanel> 
+		</@tabContent> 
+	</@tabs> 
+	</@columns>
+	<@columns>
+	<#if templates_list?has_content>
+		<@formGroup labelKey='#i18n{module.newsletter.blog.modify_document_topic.templatesList}' labelFor='template_id' helpKey='#i18n{module.newsletter.blog.modify_document_topic.templatesHelp}'>
+			<@ul>	
+			<#assign nIndex=1>
 			<#list templates_list as template >
-				<label class="radio-inline">
-					<input type="radio" name="template_id" value="${template.id}" <#if template.id=newsletterDocument.idTemplate>checked="checked"</#if>> ${template.description}
-					<!-- <img src="${img_path}/${template.picture}" class="thumblist-medium" alt="${template.description}" title="${template.description}"> -->
-				</label>
+				<@li class="d-flex">
+					<@radioButton labelFor='template_id_${nIndex}' class='radio-image' id='template_id_${nIndex}' name='template_id' value='${template.id}' checked=template.id=newsletterDocument.idTemplate labelKey=''>
+						<@img url="${img_path}/${template.picture}" class="me-1" alt="${template.description}" title="#i18n{newsletter.compose_newsletter.newsletterTemplate} ${template.description}" />
+						${template.description}
+					</@radioButton>
+				</@li>
+				<#assign nIndex=nIndex+1>
 			</#list>
-			<span class="help-text">#i18n{module.newsletter.blog.modify_document_topic.templatesHelp}</span>
-		<#else>
-			<input type="hidden" name="template_id" value="0">
-			<div class="callout callout-warning">
-				<i class="fa fa-warning"></i> #i18n{newsletter.compose_newsletter.noNewsletterTemplate}
-			</div>
-		</#if>
-	</div>
-</div>
-
+			</@ul>
+		</@formGroup>
+	<#else>
+		<@empty title='#i18n{newsletter.compose_newsletter.noNewsletterTemplate}' subtitle=' ' />
+	</#if>
+	</@columns>
+</@row>
 <script>
-function clearSelection( select ){
-	var nb=select.options.length;
-	for(i=0;i<nb;i++){select.options[i].selected=false;}
-}
-
-$(function(){
-	$(""#)
+document.querySelectorAll('[data-bs-toggle="tab"]').forEach(function(element) {
+	element.addEventListener('shown.bs.tab', event => {
+		// TODO : Remove options selection when change tab
+		console.log( event.target.hash ) // newly activated tab
+		console.log( event.relatedTarget.hash ); // previous active tab
+	})
 });
 </script>
