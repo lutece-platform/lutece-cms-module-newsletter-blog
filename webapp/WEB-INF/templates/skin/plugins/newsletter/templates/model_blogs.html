@@ -1,40 +1,15 @@
 <!-- model_document template -->
 <table width="100%" cellpadding="0" cellspacing="0">
-    <tr>
-    <#list blogs_list as blog>
-
-        <td>
-	        <table>
-	        	<tr>
-					<td>
-						<#list blog.docContent as cont>
-						    <img width="80" height="80" src="servlet/plugins/blogs/file?id_file=${cont.id}"></img>
-						</#list>
-		            	<h3>${blog.name}</h3>
-		            </td>
-		        </tr>
-		        <tr>
-		            <td>
-		                ${blog.description!}
-		            </td>
-				</tr>
-				<tr>
-					<td>
-
-				   	        <#list blog.blogPubilcation as blogPub>
-
-								<a href=${base_url}jsp/site/Portal.jsp?pag=blog&id=${blogPub.idBlog}&portlet_id=${blogPub.idPortlet}>
-				    				${blog.name}
-				               	</a>
-						</#list>
-
-	       			</td>
-       			</tr>
-	        </table>
-        </td>
-        
-        </#list>
-    </tr>
+<tr>
+<#list blogs_list as blog>
+<td>
+	<table>
+		<tr><td><h3><#if blog.docContent?? && blog.docContent?size!=0 ><#list blog.docContent as cont ><#if cont.contentType.idContentType=1><img src="servlet/plugins/blogs/file?id_file=${cont.id!}" width="40" height="40" style="max-width:100%;display:block;margin-left:15px;" alt="${blog.name}" title="${blog.name}"><#break></#if></#list></#if> ${blog.name}</h3></td></tr>
+		<tr><td>${blog.description!}</td></tr>
+		<tr><td><#list blog.blogPublication as blogPub><a href=${base_url}jsp/site/Portal.jsp?pag=blog&id=${blogPub.idBlog}&portlet_id=${blogPub.idPortlet}>${blog.name}</a></#list></td></tr>
+	</table>
+</td>
+</#list>
+</tr>
 </table>
-
 <!-- end model_document template-->
