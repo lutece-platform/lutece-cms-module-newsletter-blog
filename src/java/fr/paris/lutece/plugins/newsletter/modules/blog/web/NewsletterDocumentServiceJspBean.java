@@ -252,6 +252,6 @@ public class NewsletterDocumentServiceJspBean extends InsertServiceJspBean imple
          * AppPathService.getBaseUrl( ), _newsletterService.getUnsecuredWebappUrl( ), strUnsecuredFolderPath, strUnsecuredFolder ); }
          */
 
-        return insertUrl( request, strInput, StringEscapeUtils.escapeJavaScript( strContent ) );
+        return insertUrl( request, strInput, StringEscapeUtils.escapeEcmaScript( strContent ) );
     }
 }
