@@ -1,41 +1,61 @@
-<#include "/admin/insert/insert_utils_macros.html" />
-<@tform action='jsp/admin/plugins/newsletter/modules/blog/DoSearchDocuments.jsp' boxed=true>
-	<@input type='hidden' name='input' value=.data_model.input! />
-	<@fieldSet legend='#i18n{module.newsletter.blog.select_documents.labelSearchCriteria}' >
-	   	<@formGroup labelFor="document_list_id" labelKey='#i18n{module.newsletter.blog.select_documents.labelDocumentListCollection}'>
-			<@select id='document_list_id' name='document_list_id' default_value=document_list_id?string items=documents_lists_list />
-		</@formGroup>
-		<@formGroup labelFor='published_date' labelKey='#i18n{module.newsletter.blog.select_documents.labelPublishedSince}'>
-			<@input name='published_date' id='published_date' value=start_published_date! />
-		</@formGroup>
-		<@formGroup>
-			<@button type="submit" title='#i18n{module.newsletter.blog.select_documents.buttonSearch}' buttonICon='search' />
-	    </@formGroup>
-	</@fieldSet>
-</@tform>
-<@tform action='jsp/admin/plugins/newsletter/modules/blog/DoInsertDocuments.jsp" name="insertDocuments' boxed=true>
-	<@fieldSet legend='#i18n{module.newsletter.blog.select_documents.labelDocumentList}' >
-	    <@input type='hidden' name='input' value=.data_model.input! />
-	    <@table headeBody=true>
-		<@tr>
-			<@th></@th>
-			<@th>#i18n{module.newsletter.blog.select_documents.labelDocumentDate}</@th>
-			<@th>#i18n{module.newsletter.blog.select_documents.labelDocumentAdd}</@th>
-		</@tr>
-		<@tableHeadBodySeparator />
+<@row class='mt-3'>
+	<@columns md=4>
+		<@tform action='jsp/admin/plugins/newsletter/modules/blog/DoSearchDocuments.jsp' boxed=true>
+			<h2 class="h5">#i18n{module.newsletter.blog.select_documents.labelSearchCriteria}</h2>
+			<@input type='hidden' name='input' value=.data_model.input! />
+			<@formGroup labelFor="document_list_id" labelKey='#i18n{module.newsletter.blog.select_documents.labelDocumentListCollection}' rows=2>
+				<@select id='document_list_id' name='document_list_id' default_value=document_list_id?string items=documents_lists_list />
+			</@formGroup>
+			<#assign currentDate = .now>
+			<#assign numberOfDays = 15?long>
+			<#assign timeInMillisecond = (1000 * 60 * 60 * 24 * numberOfDays) >
+			<#assign aDate = currentDate?long - timeInMillisecond?long>
+			<#assign Diff = aDate?long>
+			<#assign beforeDate = Diff?number_to_date>
+			<#assign pubDate><#if start_published_date?? && start_published_date!=''>${start_published_date!}<#else>${beforeDate?string["dd/MM/yyyy"]}</#if></#assign>
+			<@formGroup labelFor='published_date' labelKey='#i18n{module.newsletter.blog.select_documents.labelPublishedSince}' helpKey='#i18n{newsletter.modify_newsletter.dateLastSend.help}' mandatory=true rows=2>
+			<@inputGroup>
+				<@inputGroupItem type='text'><@icon style='calendar' /></@inputGroupItem>
+					<@input name='published_date' id='published_date' value=pubDate! maxlength=10 pattern='[0-9]{2}/[0-9]{2}/[0-9]{4}' />
+				</@inputGroup>
+			</@formGroup>
+			<@formGroup>
+				<@button type="submit" title='#i18n{module.newsletter.blog.select_documents.buttonSearch}' buttonICon='search' />
+			</@formGroup>
+		</@tform>
+	</@columns>
+	<@columns md=8>
 		<#if document_list??>
-	        <#list document_list as document>
-	        <@tr>
-	            <@td>${document.name!}</@td>
-	            <@td>${document.updateDate!}</@td>
-	            <@td>
-					<@checkBox name='documents_list' value=document.id orientation='switch' />
-				</@td>
-	        </@tr>
-	        </#list>
+		<@tform action='jsp/admin/plugins/newsletter/modules/blog/DoInsertDocuments.jsp" name="insertDocuments' boxed=true>
+		<@input type='hidden' name='input' value=.data_model.input! />
+		<h2 class="h5">#i18n{module.newsletter.blog.select_documents.labelDocumentList}</h2>
+		
+			<@listGroup class='overflow-auto' params='style="max-height:300px"'>	
+				<#assign idx=1>
+				<#if document_list?size gt 0>
+				<#list document_list as document>
+					<@listGroupItem>
+						<@checkBox name='documents_list' id='document_${document.id!}_${idx}' value='${document.id!}' labelKey='${document.name!} - ${document.updateDate!}' labelFor='document_${document.id!}_${idx}' orientation='switch' />		
+					</@listGroupItem>
+					<#assign idx=idx+1>
+				</#list>
+				<#else>
+					<@div class='d-flex justify-content-center align-items-center'>	
+						<@empty class='d-flex justify-content-center flex-column align-items-center' subtitle='Relancer une recherche' iconName='list-search' />
+					</@div>
+				</#if>
+			</@listGroup>
+			<@formGroup labelKey='#i18n{module.newsletter.blog.select_documents.labelDocumentModel}' class='mt-3' mandatory=true>
+				<@select name='template_id' default_value='' items=documents_templates_list />
+			</@formGroup>
+			<@formGroup>
+				<@button type='submit' title='#i18n{module.newsletter.blog.select_documents.buttonValidate}' />
+			</@formGroup>
+		</@tform>
+		<#else>
+			<@div class='d-flex justify-content-center align-items-center card p-5'>	
+				<@empty title='Lancer une recherche ' subtitle='' iconName='search' class='p-5' />
+			</@div>
 		</#if>
-	    </@table>
-	    <@select name='template_id' default_value='' items=documents_templates_list />
-		<@button type='submit' title='#i18n{module.newsletter.blog.select_documents.buttonValidate}' />
-	</@fieldSet>
-</@tform>
+	</@columns>
+</@row>
