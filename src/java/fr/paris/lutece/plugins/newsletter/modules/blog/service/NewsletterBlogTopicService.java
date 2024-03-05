@@ -206,11 +206,13 @@ public class NewsletterBlogTopicService implements INewsletterTopicService
     public void saveConfiguration( Map<String, String [ ]> mapParameters, NewsletterTopic newsletterTopic, AdminUser user, Locale locale )
     {
         String [ ] strCategoryIds = mapParameters.get( PARAMETER_CATEGORY_LIST_ID );
-
+        Boolean useTags = false;
         NewsletterBlogHome.removeNewsLetterDocumentTags( newsletterTopic.getId( ), getNewsletterDocumentPlugin( ) );
 
-        if ( ( strCategoryIds != null ) )
+        // tags list is in the strCategoryIds
+        if ( strCategoryIds != null && strCategoryIds.length > 0 )
         {
+            useTags = true;
             // recreate the category list with the new selection
             for ( int i = 0; i < strCategoryIds.length; i++ )
             {
@@ -221,6 +223,7 @@ public class NewsletterBlogTopicService implements INewsletterTopicService
 
         NewsletterBlogHome.removeNewsLetterDocumentPortlet( newsletterTopic.getId( ), getNewsletterDocumentPlugin( ) );
         String [ ] strPortletsIds = mapParameters.get( PARAMETER_PORTLETS_ID );
+        // rubrics list is in the strPortletsIds
         if ( ( strPortletsIds != null ) )
         {
             // recreate the category list with the new selection
@@ -236,9 +239,8 @@ public class NewsletterBlogTopicService implements INewsletterTopicService
         {
             NewsletterBlog newsletterDocument = NewsletterBlogHome.findByPrimaryKey( newsletterTopic.getId( ), getNewsletterDocumentPlugin( ) );
 
-            String strUseCategories = NewsletterUtils.getStringFromStringArray( mapParameters.get( MARK_USE_CATEGORIES ) );
-            boolean bUseCategories = Boolean.parseBoolean( strUseCategories );
-            newsletterDocument.setUseDocumentTags( bUseCategories );
+
+            newsletterDocument.setUseDocumentTags( useTags );
 
             newsletterDocument.setIdTemplate( Integer.parseInt( strTemplateId ) );
             NewsletterBlogHome.updateDocumentTopic( newsletterDocument, getNewsletterDocumentPlugin( ) );
