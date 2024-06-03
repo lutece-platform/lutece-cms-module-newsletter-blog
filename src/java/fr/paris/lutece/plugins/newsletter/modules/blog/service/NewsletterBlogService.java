@@ -55,6 +55,7 @@ import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
+import fr.paris.lutece.plugins.newsletter.business.NewsLetterTemplate;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -146,12 +147,13 @@ public class NewsletterBlogService
     {
         Plugin pluginNewsLetter = PluginService.getPlugin( NewsletterPlugin.PLUGIN_NAME );
         BlogFilter documentFilter = new BlogFilter( );
+        String templateFileKey = fr.paris.lutece.plugins.newsletter.business.NewsLetterTemplateHome.findByPrimaryKey( nTemplateId, pluginNewsLetter ).getFileKey( );
         String strTemplatePath = NewsletterUtils.getHtmlTemplatePath( nTemplateId, pluginNewsLetter );
         GregorianCalendar calendar = new java.util.GregorianCalendar( );
         Date dateEndPublishing = new Date( calendar.getTimeInMillis( ) );
         Date dateStartPublishing = new Date( datePublishing.getTime( ) + 86400000 );
 
-        if ( strTemplatePath == null )
+        if ( strTemplatePath == null && templateFileKey == null )
         {
             return null;
         }
@@ -192,9 +194,15 @@ public class NewsletterBlogService
         {
             return StringUtils.EMPTY;
         }
-
-        String strContent = fillTemplateWithDocumentInfos( strTemplatePath, listBlogs, locale, strBaseUrl, user );
-
+        String strContent = StringUtils.EMPTY;
+        if ( templateFileKey != null && StringUtils.isNumeric( templateFileKey ) )
+           {
+            strContent = fillTemplateWithDocumentInfos( Integer.parseInt( templateFileKey ), listBlogs, locale, strBaseUrl, user );
+           }
+           else
+        {
+            strContent = fillTemplateWithDocumentInfos( strTemplatePath, listBlogs, locale, strBaseUrl, user );
+       }
         return strContent;
     }
 
@@ -244,6 +252,63 @@ public class NewsletterBlogService
             model.put( NewsLetterConstants.MARK_BASE_URL, strBaseUrl );
 
             HtmlTemplate template = AppTemplateService.getTemplate( strTemplatePath, locale, model );
+
+            return template.getHtml( );
+        }
+
+        return StringUtils.EMPTY;
+    }
+    /**
+     * Fills a given document template with the document data
+     *
+     * @return the html code corresponding to the document data
+     * @param strBaseUrl
+     *            The base url of the portal
+     * @param  strTemplateFilekey
+     *            The id of the template file
+     * @param listBlogs
+     *            the object gathering the document data
+     * @param locale
+     *            the locale used to build the template
+     * @param user
+     *            The current user
+     */
+    public String fillTemplateWithDocumentInfos( Integer strTemplateFilekey, Collection<Blog> listBlogs, Locale locale, String strBaseUrl, AdminUser user )
+    {
+        Collection<Portlet> porletCollec = null;
+        Map<String, Object> model = new HashMap<String, Object>( );
+        Collection<Blog> listBlogAuthorized = new ArrayList<Blog>( );
+
+        for ( Blog blog : listBlogs )
+        {
+
+            porletCollec = PublishingService.getInstance( ).getPortletsByBlogId( Integer.toString( blog.getId( ) ) );
+            porletCollec = PortletService.getInstance( ).getAuthorizedPortletCollection( porletCollec, user );
+
+            // the document insert in the buffer must be publish in a authorized portlet
+            if ( porletCollec.size( ) > 0 )
+            {
+
+                String strProdUrl = AppPathService.getProdUrl( strBaseUrl );
+                model.put( MARK_PROD_URL, strProdUrl );
+
+                Blog blg = BlogService.getInstance( ).loadBlog( blog.getId( ) );
+                listBlogAuthorized.add( blg );
+            }
+        }
+
+        if ( listBlogAuthorized.size( ) != 0 )
+        {
+
+            model.put( MARK_LIST_BLOG, listBlogAuthorized );
+            model.put( NewsLetterConstants.MARK_BASE_URL, strBaseUrl );
+
+            fr.paris.lutece.portal.business.file.File file = fr.paris.lutece.plugins.newsletter.service.NewsletterFileService.getFileByKey( strTemplateFilekey.toString() );
+            byte[] _bTemplate = file.getPhysicalFile().getValue( );
+
+            // convert byte array to html
+            String strTemplate = new String( _bTemplate );
+            HtmlTemplate template = AppTemplateService.getTemplateFromStringFtl( strTemplate, locale, model );
 
             return template.getHtml( );
         }

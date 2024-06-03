@@ -40,10 +40,17 @@
 		<@formGroup labelKey='#i18n{module.newsletter.blog.modify_document_topic.templatesList}' labelFor='template_id' helpKey='#i18n{module.newsletter.blog.modify_document_topic.templatesHelp}'>
 			<@ul>	
 			<#assign nIndex=1>
+			<#assign templateIterator = 0>
 			<#list templates_list as template >
 				<@li class="d-flex">
 					<@radioButton labelFor='template_id_${nIndex}' class='radio-image' id='template_id_${nIndex}' name='template_id' value='${template.id}' checked=template.id=newsletterDocument.idTemplate labelKey=''>
-						<@img url="${img_path}/${template.picture}" class="me-1" alt="${template.description}" title="#i18n{newsletter.compose_newsletter.newsletterTemplate} ${template.description}" />
+						<#assign templateImage=template_image_list[templateIterator]!>
+                        <#assign templateIterator=templateIterator+1>
+						<#if templateImage?? && templateImage != "">
+						<img src="data:image/jpeg;base64,${templateImage!}" class="me-1" alt="${template.description}" title="#i18n{newsletter.compose_newsletter.newsletterTemplate}" />
+						<#else>
+						<img src="${img_path}/${template.pictureKey}" class="me-1" alt="${template.description}" title="#i18n{newsletter.compose_newsletter.newsletterTemplate}" />
+						</#if>
 						${template.description}
 					</@radioButton>
 				</@li>

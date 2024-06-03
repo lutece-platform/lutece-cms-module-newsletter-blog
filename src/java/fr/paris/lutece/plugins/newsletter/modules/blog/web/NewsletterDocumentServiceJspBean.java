@@ -230,13 +230,23 @@ public class NewsletterDocumentServiceJspBean extends InsertServiceJspBean imple
 
         // retrieves the html template in order to use it to display the list of documents
         String strPathDocumentTemplate = NewsletterUtils.getHtmlTemplatePath( nTemplateId, pluginNewsletter );
+        String templateFileKey = NewsLetterTemplateHome.findByPrimaryKey( nTemplateId, pluginNewsletter ).getFileKey( );
 
         BlogFilter documentFilter = new BlogFilter( );
         documentFilter.setIds( ArrayUtils.toObject( documentsIdList ) );
         List<Blog> blogList = BlogService.getInstance( ).findByFilter( documentFilter );
 
-        String strDocumentHtmlCode = NewsletterBlogService.getInstance( ).fillTemplateWithDocumentInfos( strPathDocumentTemplate, blogList, locale, strBaseUrl,
-                AdminUserService.getAdminUser( request ) );
+        String strDocumentHtmlCode = StringUtils.EMPTY;
+        if ( templateFileKey != null && StringUtils.isNumeric( templateFileKey ) )
+        {
+            strDocumentHtmlCode = NewsletterBlogService.getInstance( ).fillTemplateWithDocumentInfos( templateFileKey, blogList, locale, strBaseUrl,
+                    AdminUserService.getAdminUser( request ) );
+        }
+        else
+        {
+            strDocumentHtmlCode = NewsletterBlogService.getInstance( ).fillTemplateWithDocumentInfos( strPathDocumentTemplate, blogList, locale, strBaseUrl,
+                    AdminUserService.getAdminUser( request ) );
+        }
 
         model.put( MARK_DOCUMENTS_LIST, strDocumentHtmlCode );
 
