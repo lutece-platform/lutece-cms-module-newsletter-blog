@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.newsletter.modules.blog.service;
 
-import fr.paris.lutece.plugins.blog.business.portlet.BlogListPortlet;
 import fr.paris.lutece.plugins.blog.business.portlet.BlogListPortletHome;
 import fr.paris.lutece.plugins.blog.service.PublishingService;
 import fr.paris.lutece.plugins.newsletter.business.NewsLetter;
@@ -60,6 +59,7 @@ import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.plugins.newsletter.util.NewsLetterConstants;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -174,6 +174,8 @@ public class NewsletterBlogTopicService implements INewsletterTopicService
             }
 
         }
+
+        listDocumentPortlets.sort( Comparator.comparing(Portlet::getName, String.CASE_INSENSITIVE_ORDER ));
 
         int [ ] arrayPortletIds = NewsletterBlogHome.findNewsletterPortletsIds( newsletterTopic.getId( ), getNewsletterDocumentPlugin( ) );
         /*
