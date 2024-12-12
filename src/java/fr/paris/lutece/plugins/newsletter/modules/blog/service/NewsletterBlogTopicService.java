@@ -54,6 +54,7 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppPathService;
+import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.plugins.newsletter.util.NewsLetterConstants;
@@ -84,10 +85,12 @@ public class NewsletterBlogTopicService implements INewsletterTopicService
     private static final String PARAMETER_PORTLETS_ID = "portlets_id";
 
     // PROPERTIES
+    private static final String CONSTANT_CATEGORYNOFILTER_KEY = "";
     private static final String CONSTANT_UNCATEGORIZED_DOCUMENTS_KEY = "-1";
 
     // MESSAGES AND LABELS
     private static final String LABEL_MODIFY_UNCATEGORIZED_DOCUMENTS = "module.newsletter.blog.modify_document_topic.uncategorizedDocuments.label";
+    private static final String LABEL_MODIFY_CATEGORYNOFILTER = "module.newsletter.blog.modify_document_topic.categoryNoFilter.label";
     private static final String MESSAGE_NEWSLETTER_DOCUMENT_TOPIC_TYPE_NAME = "module.newsletter.blog.topicType.name";
 
     // MARKS
@@ -146,9 +149,20 @@ public class NewsletterBlogTopicService implements INewsletterTopicService
         // We get the categories associated with the topic
         int [ ] arrayCategoryListIds = NewsletterBlogHome.findNewsletterTagIds( newsletterTopic.getId( ), getNewsletterDocumentPlugin( ) );
 
-        // We get the list of categories available for this topic type
-        ReferenceList listCategoryList = NewsletterBlogHome.getAllTag( user );
+        ReferenceList listCategoryList = new ReferenceList();
+
+        ReferenceItem defaultItem = new ReferenceItem();
+        defaultItem.setCode( CONSTANT_CATEGORYNOFILTER_KEY );
+        defaultItem.setName( I18nService.getLocalizedString( LABEL_MODIFY_CATEGORYNOFILTER, locale ));
+
+        listCategoryList.add( defaultItem );
         listCategoryList.addItem( CONSTANT_UNCATEGORIZED_DOCUMENTS_KEY, I18nService.getLocalizedString( LABEL_MODIFY_UNCATEGORIZED_DOCUMENTS, locale ) );
+
+        // We get the list of categories available for this topic type
+        ReferenceList listCategoryListTags = NewsletterBlogHome.getAllTag( user );
+        listCategoryListTags.sort(Comparator.comparing( ReferenceItem::getName , String.CASE_INSENSITIVE_ORDER ));
+        listCategoryList.addAll(listCategoryListTags);
+
         String [ ] strSelectedCategoryList = new String [ arrayCategoryListIds.length];
 
         for ( int i = 0; i < arrayCategoryListIds.length; i++ )
@@ -156,7 +170,14 @@ public class NewsletterBlogTopicService implements INewsletterTopicService
             strSelectedCategoryList [i] = String.valueOf( arrayCategoryListIds [i] );
         }
         // We check categories associated with this topic
-        listCategoryList.checkItems( strSelectedCategoryList );
+        if( strSelectedCategoryList.length==0 )
+        {
+            defaultItem.setChecked(true);
+        }
+        else
+        {
+            listCategoryList.checkItems(strSelectedCategoryList);
+        }
 
         // We get the list of document list portlets containing published documents
         // ReferenceList listDocumentPortlets = NewsletterBlogService.getInstance( ).getPortletBlogList( );
@@ -233,12 +254,15 @@ public class NewsletterBlogTopicService implements INewsletterTopicService
         // tags list is in the strCategoryIds
         if ( strCategoryIds != null && strCategoryIds.length > 0 )
         {
-            useTags = true;
             // recreate the category list with the new selection
             for ( int i = 0; i < strCategoryIds.length; i++ )
             {
-                int nCategoryId = Integer.parseInt( strCategoryIds [i] );
-                NewsletterBlogHome.associateNewsLetterDocumentCategory( newsletterTopic.getId( ), nCategoryId, getNewsletterDocumentPlugin( ) );
+                if( !strCategoryIds[i].isEmpty() )
+                {
+                    int nCategoryId = Integer.parseInt( strCategoryIds [i] );
+                    useTags = true;
+                    NewsletterBlogHome.associateNewsLetterDocumentCategory( newsletterTopic.getId( ), nCategoryId, getNewsletterDocumentPlugin( ) );
+                }
             }
         }
 
@@ -287,10 +311,9 @@ public class NewsletterBlogTopicService implements INewsletterTopicService
         {
             topic.setIdTemplate( 0 );
         }
-        topic.setUseDocumentTags( true );
+        topic.setUseDocumentTags( false );
         NewsletterBlogHome.createDocumentTopic( topic, getNewsletterDocumentPlugin( ) );
-        NewsletterBlogHome.associateNewsLetterDocumentCategory( newsletterTopic.getId( ), Integer.parseInt( CONSTANT_UNCATEGORIZED_DOCUMENTS_KEY ),
-                getNewsletterDocumentPlugin( ) );
+
     }
 
     /**
