@@ -1,3 +1,6 @@
+-- liquibase formatted sql
+-- changeset newsletter-blog:create_db_newsletter_blog.sql
+-- preconditions onFail:MARK_RAN onError:WARN
 --
 -- Table structure for table newsletter_blogs_topic
 --
