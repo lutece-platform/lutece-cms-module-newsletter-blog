@@ -42,7 +42,6 @@ import fr.paris.lutece.plugins.blog.service.PublishingService;
 import fr.paris.lutece.plugins.newsletter.modules.blog.business.NewsletterBlog;
 import fr.paris.lutece.plugins.newsletter.modules.blog.business.NewsletterBlogHome;
 import fr.paris.lutece.plugins.newsletter.service.NewsletterPlugin;
-import fr.paris.lutece.plugins.newsletter.service.NewsletterService;
 import fr.paris.lutece.plugins.newsletter.util.NewsLetterConstants;
 import fr.paris.lutece.plugins.newsletter.util.NewsletterUtils;
 import fr.paris.lutece.portal.business.portlet.Portlet;
@@ -55,7 +54,6 @@ import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
-import fr.paris.lutece.plugins.newsletter.business.NewsLetterTemplate;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -67,67 +65,28 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
- * Newsletter blog service. This class implements the singleton design pattern.
+ * Newsletter blog service.
  */
+@ApplicationScoped
 public class NewsletterBlogService
 {
 
     private static final String MARK_PROD_URL = "prod_url";
     private static final String MARK_LIST_BLOG = "blogs_list";
-    private static final String MARK_FILE_ID = "id_file";
 
-    private static final String DOCUMENT_RESOURCE_SERVLET_URL = "servlet/plugins/blogs/file";
-
-    private static NewsletterBlogService _singleton = new NewsletterBlogService( );
-    private NewsletterService _newsletterService = NewsletterService.getService( );
-
-    /**
-     * Returns the instance of the singleton
-     * 
-     * @return The instance of the singleton
-     */
-    public static NewsletterBlogService getInstance( )
-    {
-        return _singleton;
-    }
-
-    /**
-     * Copy specified document's type file into a given folder
-     * 
-     * @param document
-     *            the blog
-     * @param strFileType
-     *            the file type
-     * @param strDestFolderPath
-     *            the destination folder
-     * @return name of the copy file or null if there is no copied file
-     */
-    /*
-     * public String copyFileFromDocument( Blog document, String strFileType, String strDestFolderPath ) { String strFileName = null;
-     * 
-     * if ( document.getDocContent( ).size( ) == 0 ) {
-     * 
-     * return strFileName; } // get the first file DocContent docContent = document.getDocContent( ).get( 0 ); byte [ ] tabByte = docContent.getBinaryValue( );
-     * strFileName = NewsletterBlogUtils.formatInteger( document.getId( ), 5 ) + NewsletterBlogUtils.formatInteger( docContent.getId( ), 5 ) +
-     * NewsletterBlogUtils.formatInteger( 1, 5 ) + FULLSTOP + StringUtils.substringAfterLast( docContent.getTextValue( ), FULLSTOP );
-     * 
-     * FileOutputStream fos = null;
-     * 
-     * try { File file = new File( strDestFolderPath ); if ( !file.exists( ) ) { if ( !file.mkdir( ) ) { throw new IOException( ); } }
-     * 
-     * file = new File( strDestFolderPath + strFileName ); fos = new FileOutputStream( file ); IOUtils.write( tabByte, fos ); } catch( IOException e ) {
-     * AppLogService.error( e ); } catch( Exception e ) { AppLogService.error( e ); } finally { IOUtils.closeQuietly( fos ); }
-     * 
-     * return strFileName; }
-     */
+    @Inject
+    private PortletService _portletService;
 
     /**
      * Generate the html code for documents corresponding to the documents associated with the topic and to a given publishing date
-     * 
+     *
      * @param newsletterDocument
      *            the topic to generate
      * @param nTemplateId
@@ -184,7 +143,6 @@ public class NewsletterBlogService
                         nIndex++;
                     }
                     documentFilter.setIds( arrayDocumentsId );
-                    // documentFilter.setLoadBinaries( true );
                     listBlogs = BlogService.getInstance( ).findByFilter( documentFilter );
                 }
             }
@@ -194,52 +152,46 @@ public class NewsletterBlogService
         {
             return StringUtils.EMPTY;
         }
-        String strContent = StringUtils.EMPTY;
+        String strContent;
         if ( templateFileKey != null && StringUtils.isNumeric( templateFileKey ) )
-           {
+        {
             strContent = fillTemplateWithDocumentInfos( Integer.parseInt( templateFileKey ), listBlogs, locale, strBaseUrl, user );
-           }
-           else
+        }
+        else
         {
             strContent = fillTemplateWithDocumentInfos( strTemplatePath, listBlogs, locale, strBaseUrl, user );
-       }
+        }
         return strContent;
     }
 
     /**
-     * Fills a given document template with the document data
-     * 
-     * @return the html code corresponding to the document data
-     * @param strBaseUrl
-     *            The base url of the portal
+     * Fills a given document template with the document data.
+     *
      * @param strTemplatePath
      *            The path of the template file
      * @param listBlogs
      *            the object gathering the document data
      * @param locale
      *            the locale used to build the template
+     * @param strBaseUrl
+     *            The base url of the portal
      * @param user
      *            The current user
+     * @return the html code corresponding to the document data
      */
     public String fillTemplateWithDocumentInfos( String strTemplatePath, Collection<Blog> listBlogs, Locale locale, String strBaseUrl, AdminUser user )
     {
-        Collection<Portlet> porletCollec = null;
-        Map<String, Object> model = new HashMap<String, Object>( );
-        Collection<Blog> listBlogAuthorized = new ArrayList<Blog>( );
+        Map<String, Object> model = new HashMap<>( );
+        Collection<Blog> listBlogAuthorized = new ArrayList<>( );
 
         for ( Blog blog : listBlogs )
         {
-
-            porletCollec = PublishingService.getInstance( ).getPortletsByBlogId( Integer.toString( blog.getId( ) ) );
-            porletCollec = PortletService.getInstance( ).getAuthorizedPortletCollection( porletCollec, user );
-
-            // the document insert in the buffer must be publish in a authorized portlet
+            Collection<Portlet> porletCollec = PublishingService.getInstance( ).getPortletsByBlogId( Integer.toString( blog.getId( ) ) );
+            porletCollec = _portletService.getAuthorizedPortletCollection( porletCollec, user );
             if ( porletCollec.size( ) > 0 )
             {
-
                 String strProdUrl = AppPathService.getProdUrl( strBaseUrl );
                 model.put( MARK_PROD_URL, strProdUrl );
-
                 Blog blg = BlogService.getInstance( ).loadBlog( blog.getId( ) );
                 listBlogAuthorized.add( blg );
             }
@@ -247,51 +199,42 @@ public class NewsletterBlogService
 
         if ( listBlogAuthorized.size( ) != 0 )
         {
-
             model.put( MARK_LIST_BLOG, listBlogAuthorized );
             model.put( NewsLetterConstants.MARK_BASE_URL, strBaseUrl );
-
             HtmlTemplate template = AppTemplateService.getTemplate( strTemplatePath, locale, model );
-
             return template.getHtml( );
         }
-
         return StringUtils.EMPTY;
     }
+
     /**
-     * Fills a given document template with the document data
+     * Fills a given document template (from an uploaded file) with the document data.
      *
-     * @return the html code corresponding to the document data
-     * @param strBaseUrl
-     *            The base url of the portal
-     * @param  strTemplateFilekey
+     * @param strTemplateFilekey
      *            The id of the template file
      * @param listBlogs
      *            the object gathering the document data
      * @param locale
      *            the locale used to build the template
+     * @param strBaseUrl
+     *            The base url of the portal
      * @param user
      *            The current user
+     * @return the html code corresponding to the document data
      */
     public String fillTemplateWithDocumentInfos( Integer strTemplateFilekey, Collection<Blog> listBlogs, Locale locale, String strBaseUrl, AdminUser user )
     {
-        Collection<Portlet> porletCollec = null;
-        Map<String, Object> model = new HashMap<String, Object>( );
-        Collection<Blog> listBlogAuthorized = new ArrayList<Blog>( );
+        Map<String, Object> model = new HashMap<>( );
+        Collection<Blog> listBlogAuthorized = new ArrayList<>( );
 
         for ( Blog blog : listBlogs )
         {
-
-            porletCollec = PublishingService.getInstance( ).getPortletsByBlogId( Integer.toString( blog.getId( ) ) );
-            porletCollec = PortletService.getInstance( ).getAuthorizedPortletCollection( porletCollec, user );
-
-            // the document insert in the buffer must be publish in a authorized portlet
+            Collection<Portlet> porletCollec = PublishingService.getInstance( ).getPortletsByBlogId( Integer.toString( blog.getId( ) ) );
+            porletCollec = _portletService.getAuthorizedPortletCollection( porletCollec, user );
             if ( porletCollec.size( ) > 0 )
             {
-
                 String strProdUrl = AppPathService.getProdUrl( strBaseUrl );
                 model.put( MARK_PROD_URL, strProdUrl );
-
                 Blog blg = BlogService.getInstance( ).loadBlog( blog.getId( ) );
                 listBlogAuthorized.add( blg );
             }
@@ -299,45 +242,35 @@ public class NewsletterBlogService
 
         if ( listBlogAuthorized.size( ) != 0 )
         {
-
             model.put( MARK_LIST_BLOG, listBlogAuthorized );
             model.put( NewsLetterConstants.MARK_BASE_URL, strBaseUrl );
-
-            fr.paris.lutece.portal.business.file.File file = fr.paris.lutece.plugins.newsletter.service.NewsletterFileService.getFileByKey( strTemplateFilekey.toString() );
-            byte[] _bTemplate = file.getPhysicalFile().getValue( );
-
-            // convert byte array to html
-            String strTemplate = new String( _bTemplate );
+            fr.paris.lutece.portal.business.file.File file = fr.paris.lutece.plugins.newsletter.service.NewsletterFileService.getFileByKey( strTemplateFilekey.toString( ) );
+            byte [ ] bTemplate = file.getPhysicalFile( ).getValue( );
+            String strTemplate = new String( bTemplate );
             HtmlTemplate template = AppTemplateService.getTemplateFromStringFtl( strTemplate, locale, model );
-
             return template.getHtml( );
         }
-
         return StringUtils.EMPTY;
     }
 
     /**
-     * Load the portlet of type blog_LIST
-     * 
-     * @return
+     * Load the portlet of type BLOG_LIST.
+     *
+     * @return the reference list of portlets of type BLOG_LIST
      */
     public ReferenceList getPortletBlogList( )
     {
-
         ReferenceList list = new ReferenceList( );
         String className = BlogListPortletHome.class.getName( );
         String strPortletTypeId = PortletTypeHome.getPortletTypeId( className );
 
         for ( Portlet pt : PublishingService.getInstance( ).getBlogsPortlets( ) )
         {
-
             if ( pt.getPortletTypeId( ).equals( strPortletTypeId ) )
             {
                 list.addItem( pt.getId( ), pt.getName( ) );
             }
-
         }
         return list;
-
     }
 }

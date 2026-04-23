@@ -20,13 +20,13 @@
 				</@inputGroup>
 			</@formGroup>
 			<@formGroup>
-				<@button type="submit" title='#i18n{module.newsletter.blog.select_documents.buttonSearch}' buttonICon='search' />
+				<@button type="submit" title='#i18n{module.newsletter.blog.select_documents.buttonSearch}' buttonIcon='search' />
 			</@formGroup>
 		</@tform>
 	</@columns>
 	<@columns md=8>
 		<#if document_list??>
-		<@tform action='jsp/admin/plugins/newsletter/modules/blog/DoInsertDocuments.jsp" name="insertDocuments' boxed=true>
+		<@tform action='jsp/admin/plugins/newsletter/modules/blog/DoInsertDocuments.jsp' name='insertDocuments' boxed=true>
 		<@input type='hidden' name='input' value=.data_model.input! />
 		<h2 class="h5">#i18n{module.newsletter.blog.select_documents.labelDocumentList}</h2>
 		
