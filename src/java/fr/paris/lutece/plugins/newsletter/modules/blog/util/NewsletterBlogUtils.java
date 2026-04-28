@@ -33,8 +33,6 @@
  */
 package fr.paris.lutece.plugins.newsletter.modules.blog.util;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
  * Utility class for newsletter document
  */
@@ -54,30 +52,6 @@ public final class NewsletterBlogUtils
     {
 
     }
-
-    /**
-     * Rewrite secured img urls to absolutes urls
-     * 
-     * @param strContent
-     *            The content to analyze
-     * @param strBaseUrl
-     *            The base url
-     * @param strUnsecuredBaseUrl
-     *            The unsecured base URL
-     * @param strUnsecuredFolderPath
-     *            The unsecured folder path
-     * @param strUnsecuredFolder
-     *            The unsecured folder
-     * @return The converted content
-     */
-    /*
-     * public static String rewriteImgUrls( String strContent, String strBaseUrl, String strUnsecuredBaseUrl, String strUnsecuredFolderPath, String
-     * strUnsecuredFolder ) { if ( strContent == null ) { return StringUtils.EMPTY; } BlogNewsletterDocument doc = new BlogNewsletterDocument( strContent,
-     * strBaseUrl ); doc.convertUrlsToUnsecuredUrls( BlogNewsletterDocument.ELEMENT_IMG, strUnsecuredBaseUrl, strUnsecuredFolderPath, strUnsecuredFolder );
-     * doc.convertUrlsToUnsecuredUrls( BlogNewsletterDocument.ELEMENT_A, strUnsecuredBaseUrl, strUnsecuredFolderPath, strUnsecuredFolder );
-     * 
-     * return doc.getContent( ); }
-     */
 
     /**
      * Get the string representation of an integer with a specified number of digits.

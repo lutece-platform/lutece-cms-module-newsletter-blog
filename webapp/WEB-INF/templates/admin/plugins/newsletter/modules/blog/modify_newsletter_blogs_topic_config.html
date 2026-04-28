@@ -43,7 +43,7 @@
 			<#assign templateIterator = 0>
 			<#list templates_list as template >
 				<@li class="d-flex">
-					<@radioButton labelFor='template_id_${nIndex}' class='radio-image' id='template_id_${nIndex}' name='template_id' value='${template.id}' checked=template.id=newsletterDocument.idTemplate labelKey=''>
+					<@radioButton labelFor='template_id_${nIndex}' class='radio-image' id='template_id_${nIndex}' name='template_id' value='${template.id}' checked=(template.id==newsletterDocument.idTemplate) labelKey=''>
 						<#assign templateImage=template_image_list[templateIterator]!>
                         <#assign templateIterator=templateIterator+1>
 						<#if templateImage?? && templateImage != "">

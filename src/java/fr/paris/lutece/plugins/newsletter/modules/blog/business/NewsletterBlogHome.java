@@ -38,19 +38,20 @@ import fr.paris.lutece.plugins.blog.service.PublishingService;
 import fr.paris.lutece.plugins.blog.service.TagService;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceList;
 
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import jakarta.enterprise.inject.spi.CDI;
+
 /**
  * Home for newsletter document
  */
 public final class NewsletterBlogHome
 {
-    private static INewsletterBlogDAO _dao = SpringContextService.getBean( "newsletter-blog.newsletterBlogDAO" );
+    private static INewsletterBlogDAO _dao = CDI.current( ).select( INewsletterBlogDAO.class ).get( );
 
     /**
      * Private constructor
@@ -218,18 +219,20 @@ public final class NewsletterBlogHome
 
     /**
      * Get the list of id of published blogs associated with a given collection of portlets.
-     * 
+     *
      * @param nPortletsIds
      *            The list of portlet ids.
      * @param datePublishing
-     *            TODO
+     *            The lower bound of the publishing date range (inclusive).
+     * @param dateEndPublishing
+     *            The upper bound of the publishing date range (inclusive).
      * @param plugin
      *            The document plugin
      * @return The list of documents id.
      */
     public static List<Integer> getPublishedDocumentsIdsListByPortletIds( int [ ] nPortletsIds, Date datePublishing, Date dateEndPublishing, Plugin plugin )
     {
-        return PublishingService.getInstance( ).getPublishedBlogsIdsListByPortletIds( nPortletsIds, datePublishing, dateEndPublishing, plugin );
+        return PublishingService.getPublishedBlogsIdsListByPortletIds( nPortletsIds, datePublishing, dateEndPublishing, plugin );
     }
 
     /**

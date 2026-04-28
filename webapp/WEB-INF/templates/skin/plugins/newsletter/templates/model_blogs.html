@@ -7,12 +7,12 @@
 <tr>
 	<td>
 		<table>
-			<tr><td><h3><#if blog.docContent?? && blog.docContent?size!=0 ><#list blog.docContent as cont ><#if cont.contentType.idContentType=1><img src="servlet/plugins/blogs/file?id_file=${cont.id!}" width="40" height="40" style="max-width:100%;display:block;margin-left:15px;" alt="${blog.name}" title="${blog.name}"><#break></#if></#list></#if> ${blog.name}</h3></td></tr>
+			<tr><td><h3><#if blog.docContent?? && blog.docContent?size!=0 ><#list blog.docContent as cont ><#if cont.contentType.idContentType==1><img src="servlet/plugins/blogs/file?id_file=${cont.id!}" width="40" height="40" style="max-width:100%;display:block;margin-left:15px;" alt="${blog.name}" title="${blog.name}"><#break></#if></#list></#if> ${blog.name}</h3></td></tr>
 			<tr><td>${blog.description!}</td></tr>
 			<#list blog.blogPublication as blogPub>
 				<tr>
 					<td>
-						<a href=${base_url}jsp/site/Portal.jsp?page=blog&id=${blogPub.idBlog}&portlet_id=${blogPub.idPortlet}>${blog.name}</a>
+						<a href="${base_url}jsp/site/Portal.jsp?page=blog&id=${blogPub.idBlog}&portlet_id=${blogPub.idPortlet}">${blog.name!}</a>
 					</td>
 				</tr>
 				<#break>

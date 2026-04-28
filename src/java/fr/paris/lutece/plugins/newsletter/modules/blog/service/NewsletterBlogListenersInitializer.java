@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2021, City of Paris
+ * Copyright (c) 2002-2026, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,27 +33,37 @@
  */
 package fr.paris.lutece.plugins.newsletter.modules.blog.service;
 
-import fr.paris.lutece.portal.service.plugin.Plugin;
+import fr.paris.lutece.plugins.newsletter.modules.blog.business.NewsletterBlogTemplateRemovalListener;
+import fr.paris.lutece.portal.service.util.RemovalListenerService;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.Initialized;
+import jakarta.enterprise.event.Observes;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.servlet.ServletContext;
 
 /**
- * The newsletter blog plugin. Instantiated by the Lutece core via reflection
- * (declared in {@code newsletter-blog.xml}); not a CDI-managed bean. The
- * template removal listener is registered by
- * {@link NewsletterBlogListenersInitializer} at CDI startup.
+ * Registers the module's template removal listener against the newsletter
+ * template removal service when the CDI container starts. Replaces the
+ * legacy {@code NewsletterBlogPlugin.init( )} registration.
  */
-public class NewsletterBlogPlugin extends Plugin
+@ApplicationScoped
+public class NewsletterBlogListenersInitializer
 {
-    /**
-     * Name of the plugin
-     */
-    public static final String PLUGIN_NAME = "newsletter-blog";
+    @Inject
+    @Named( "newsletter.newsletterTemplateRemovalService" )
+    private RemovalListenerService _newsletterTemplateRemovalService;
 
     /**
-     * {@inheritDoc}
+     * Register the blog template removal listener when the application-scoped
+     * context is initialized.
+     *
+     * @param context
+     *            the servlet context
      */
-    @Override
-    public void init( )
+    public void onStartup( @Observes @Initialized( ApplicationScoped.class ) ServletContext context )
     {
+        _newsletterTemplateRemovalService.registerListener( new NewsletterBlogTemplateRemovalListener( ) );
     }
-
 }

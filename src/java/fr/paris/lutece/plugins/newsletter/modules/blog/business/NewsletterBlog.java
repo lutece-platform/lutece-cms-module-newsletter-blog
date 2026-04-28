@@ -33,11 +33,15 @@
  */
 package fr.paris.lutece.plugins.newsletter.modules.blog.business;
 
+import java.io.Serializable;
+
 /**
  * Newsletter blogs topic class
  */
-public class NewsletterBlog
+public class NewsletterBlog implements Serializable
 {
+    private static final long serialVersionUID = 1L;
+
     private int _nId;
     private int _nIdTemplate;
     private boolean _bUseDocumentTags;

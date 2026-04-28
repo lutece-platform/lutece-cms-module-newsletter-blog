@@ -1,7 +1,5 @@
 <%@ page errorPage="../../../../ErrorPage.jsp" %>
 
-<jsp:useBean id="newsletterService" scope="session" class="fr.paris.lutece.plugins.newsletter.modules.blog.web.NewsletterDocumentServiceJspBean" />
-<%
-	response.sendRedirect( newsletterService.doInsert( request ) );
-%>
+<%@page import="fr.paris.lutece.plugins.newsletter.modules.blog.web.NewsletterDocumentServiceJspBean"%>
 
+${ pageContext.response.sendRedirect( newsletterDocumentServiceJspBean.doInsert( pageContext.request )) }
