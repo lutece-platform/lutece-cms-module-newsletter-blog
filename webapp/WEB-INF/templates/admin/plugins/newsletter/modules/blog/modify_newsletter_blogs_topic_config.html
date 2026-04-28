@@ -1,74 +1,65 @@
 <@row>
 	<@columns sm=6>
-	<@tabs>
-		<@tabList>
-			<@tabLink active=true href='#use_categories' title='#i18n{module.newsletter.blog.modify_document_topic.radioUseCategories}' />
-			<@tabLink href='#use_portlets' title='#i18n{module.newsletter.blog.modify_document_topic.radioUsePortlets}' />
-		</@tabList>
-		<@tabContent>
-			<@tabPanel id='use_categories' active=true >
-			<#if category_list?has_content>
-				<@formGroup labelFor='category_list_id' labelKey='#i18n{module.newsletter.blog.modify_document_topic.categoryList}'>
-					<@select name='category_list_id' multiple=20 >
-					<#list category_list as item>
-						<@option value=item.code label=item.name selected=item.checked />
-					</#list>
-					</@select>
-				</@formGroup> 	
-			<#else>
-				<@empty title='#i18n{module.newsletter.blog.modify_document_topic.labelNoCategory}' subtitle=' ' />
-			</#if>
-			</@tabPanel>
-			<@tabPanel id='use_portlets'>
-			<#if document_list_portlets?has_content>
-				<@formGroup labelFor='portlets_id' labelKey='#i18n{module.newsletter.blog.modify_document_topic.portletList}'>
-					<@select name='portlets_id' multiple=20 >
-						<#list document_list_portlets as item>
-							<@option value=item.id label=item.name selected=portlets_associated_topic?seq_contains(item.id) />
-						</#list>
-					</@select>
-				</@formGroup> 		
-			<#else>
-				<@empty title='#i18n{module.newsletter.document.modify_document_topic.labelNoPortlet}' subtitle=' ' />
-			</#if>
-			</@tabPanel> 
-		</@tabContent> 
-	</@tabs> 
+		<@tabs>
+			<@tabList>
+				<@tabLink active=true href='#use_categories' title='#i18n{module.newsletter.blog.modify_document_topic.radioUseCategories}' />
+				<@tabLink href='#use_portlets' title='#i18n{module.newsletter.blog.modify_document_topic.radioUsePortlets}' />
+			</@tabList>
+			<@tabContent>
+				<@tabPanel id='use_categories' active=true>
+					<#if category_list?has_content>
+						<@formGroup labelFor='category_list_id' labelKey='#i18n{module.newsletter.blog.modify_document_topic.categoryList}'>
+							<@select name='category_list_id' multiple=20>
+								<#list category_list as item>
+									<@option value=item.code label=item.name selected=item.checked />
+								</#list>
+							</@select>
+						</@formGroup>
+					<#else>
+						<@empty title='#i18n{module.newsletter.blog.modify_document_topic.labelNoCategory}' iconName='tag-off' />
+					</#if>
+				</@tabPanel>
+				<@tabPanel id='use_portlets'>
+					<#if document_list_portlets?has_content>
+						<@formGroup labelFor='portlets_id' labelKey='#i18n{module.newsletter.blog.modify_document_topic.portletList}'>
+							<@select name='portlets_id' multiple=20>
+								<#list document_list_portlets as item>
+									<@option value=item.id label=item.name selected=portlets_associated_topic?seq_contains(item.id) />
+								</#list>
+							</@select>
+						</@formGroup>
+					<#else>
+						<@empty title='#i18n{module.newsletter.document.modify_document_topic.labelNoPortlet}' iconName='layout-off' />
+					</#if>
+				</@tabPanel>
+			</@tabContent>
+		</@tabs>
 	</@columns>
 	<@columns>
-	<#if templates_list?has_content>
-		<@formGroup labelKey='#i18n{module.newsletter.blog.modify_document_topic.templatesList}' labelFor='template_id' helpKey='#i18n{module.newsletter.blog.modify_document_topic.templatesHelp}'>
-			<@ul>	
-			<#assign nIndex=1>
-			<#assign templateIterator = 0>
-			<#list templates_list as template >
-				<@li class="d-flex">
-					<@radioButton labelFor='template_id_${nIndex}' class='radio-image' id='template_id_${nIndex}' name='template_id' value='${template.id}' checked=(template.id==newsletterDocument.idTemplate) labelKey=''>
-						<#assign templateImage=template_image_list[templateIterator]!>
-                        <#assign templateIterator=templateIterator+1>
-						<#if templateImage?? && templateImage != "">
-						<img src="data:image/jpeg;base64,${templateImage!}" class="me-1" alt="${template.description}" title="#i18n{newsletter.compose_newsletter.newsletterTemplate}" />
-						<#else>
-						<img src="${img_path}/${template.pictureKey}" class="me-1" alt="${template.description}" title="#i18n{newsletter.compose_newsletter.newsletterTemplate}" />
-						</#if>
-						${template.description}
-					</@radioButton>
-				</@li>
-				<#assign nIndex=nIndex+1>
-			</#list>
-			</@ul>
-		</@formGroup>
-	<#else>
-		<@empty title='#i18n{newsletter.compose_newsletter.noNewsletterTemplate}' subtitle=' ' />
-	</#if>
+		<#if templates_list?has_content>
+			<@formGroup labelKey='#i18n{module.newsletter.blog.modify_document_topic.templatesList}' labelFor='template_id' helpKey='#i18n{module.newsletter.blog.modify_document_topic.templatesHelp}'>
+				<@ul class='list-unstyled'>
+					<#assign nIndex=1>
+					<#assign templateIterator=0>
+					<#list templates_list as template>
+						<@li class='d-flex'>
+							<@radioButton labelFor='template_id_${nIndex}' class='radio-image' id='template_id_${nIndex}' name='template_id' value='${template.id}' checked=(template.id==newsletterDocument.idTemplate) labelKey=''>
+								<#assign templateImage=template_image_list[templateIterator]!>
+								<#assign templateIterator=templateIterator+1>
+								<#if templateImage?? && templateImage != ''>
+									<@img url='data:image/jpeg;base64,${templateImage!}' class='me-1 img-fluid' alt='${template.description}' title='#i18n{newsletter.compose_newsletter.newsletterTemplate}' />
+								<#else>
+									<@img url='${img_path}/${template.pictureKey}' class='me-1 img-fluid' alt='${template.description}' title='#i18n{newsletter.compose_newsletter.newsletterTemplate}' />
+								</#if>
+								${template.description}
+							</@radioButton>
+						</@li>
+						<#assign nIndex=nIndex+1>
+					</#list>
+				</@ul>
+			</@formGroup>
+		<#else>
+			<@empty title='#i18n{newsletter.compose_newsletter.noNewsletterTemplate}' iconName='template-off' />
+		</#if>
 	</@columns>
 </@row>
-<script>
-document.querySelectorAll('[data-bs-toggle="tab"]').forEach(function(element) {
-	element.addEventListener('shown.bs.tab', event => {
-		// TODO : Remove options selection when change tab
-		console.log( event.target.hash ) // newly activated tab
-		console.log( event.relatedTarget.hash ); // previous active tab
-	})
-});
-</script>

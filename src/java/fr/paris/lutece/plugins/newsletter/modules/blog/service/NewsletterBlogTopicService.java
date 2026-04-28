@@ -66,6 +66,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.spi.CDI;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
@@ -108,6 +109,29 @@ public class NewsletterBlogTopicService implements INewsletterTopicService
 
     @Inject
     private NewsletterService _newsletterService;
+
+    /**
+     * Lazy lookup that works even when CDI field injection has not fired for
+     * this instance (observed when the topic service is consumed through
+     * {@code Instance<INewsletterTopicService>} from a cross-archive context).
+     */
+    private NewsletterBlogService getNewsletterBlogService( )
+    {
+        if ( _newsletterBlogService == null )
+        {
+            _newsletterBlogService = CDI.current( ).select( NewsletterBlogService.class ).get( );
+        }
+        return _newsletterBlogService;
+    }
+
+    private NewsletterService getNewsletterService( )
+    {
+        if ( _newsletterService == null )
+        {
+            _newsletterService = CDI.current( ).select( NewsletterService.class ).get( );
+        }
+        return _newsletterService;
+    }
 
     /**
      * {@inheritDoc}
@@ -193,7 +217,7 @@ public class NewsletterBlogTopicService implements INewsletterTopicService
 
         NewsletterBlog newsletterDocument = NewsletterBlogHome.findByPrimaryKey( newsletterTopic.getId( ), getNewsletterDocumentPlugin( ) );
 
-        String strPathImageTemplate = _newsletterService.getImageFolderPath( strBaseUrl );
+        String strPathImageTemplate = getNewsletterService( ).getImageFolderPath( strBaseUrl );
         java.util.Collection<NewsLetterTemplate> listTemplates = NewsLetterTemplateHome.getTemplatesCollectionByType( NEWSLETTER_DOCUMENT_TOPIC_TYPE,
                 getNewsletterPlugin( ) );
 
@@ -312,7 +336,7 @@ public class NewsletterBlogTopicService implements INewsletterTopicService
     {
         NewsLetter newsletter = NewsLetterHome.findByPrimaryKey( newsletterTopic.getIdNewsletter( ), getNewsletterPlugin( ) );
         NewsletterBlog newsletterDocument = NewsletterBlogHome.findByPrimaryKey( newsletterTopic.getId( ), getNewsletterDocumentPlugin( ) );
-        return _newsletterBlogService.generateDocumentsList( newsletterDocument, newsletterDocument.getIdTemplate( ), newsletter.getDateLastSending( ),
+        return getNewsletterBlogService( ).generateDocumentsList( newsletterDocument, newsletterDocument.getIdTemplate( ), newsletter.getDateLastSending( ),
                 fr.paris.lutece.portal.service.util.AppPathService.getProdUrl( "" ), user, locale );
     }
 
