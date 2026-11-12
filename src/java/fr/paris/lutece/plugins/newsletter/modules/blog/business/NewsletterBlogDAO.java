@@ -60,7 +60,7 @@ public class NewsletterBlogDAO implements INewsletterBlogDAO
     private static final String SQL_QUERY_ASSOCIATE_NEWSLETTER_PORTLET = "INSERT INTO newsletter_blogs_portlet ( id_topic , id_portlet ) VALUES ( ?, ? ) ";
     private static final String SQL_QUERY_SELECT_NEWSLETTER_PORTLET_IDS = " SELECT id_portlet FROM newsletter_blogs_portlet WHERE id_topic = ? ";
     private static final String SQL_QUERY_DELETE_NEWSLETTER_PORTLET = "DELETE FROM newsletter_blogs_portlet WHERE id_topic = ?";
-    private static final String SQL_QUERY_FIND_TEMPLATE = " SELECT count(id_template) FROM newsletter_blogs_portlet WHERE id_template = ? ";
+    private static final String SQL_QUERY_FIND_TEMPLATE = " SELECT count(id_template) FROM newsletter_blogs_topic WHERE id_template = ? ";
 
     /**
      * {@inheritDoc}
