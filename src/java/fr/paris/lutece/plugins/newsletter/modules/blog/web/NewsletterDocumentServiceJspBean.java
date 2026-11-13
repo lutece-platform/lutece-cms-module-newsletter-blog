@@ -50,6 +50,7 @@ import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
+import fr.paris.lutece.portal.service.template.HtmlMarkup;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.web.insert.InsertServiceJspBean;
 import fr.paris.lutece.portal.web.insert.InsertServiceSelectionBean;
@@ -248,7 +249,8 @@ public class NewsletterDocumentServiceJspBean extends InsertServiceJspBean imple
                     AdminUserService.getAdminUser( request ) );
         }
 
-        model.put( MARK_DOCUMENTS_LIST, strDocumentHtmlCode );
+        // the list of posts is HTML rendered from the newsletter template
+        model.put( MARK_DOCUMENTS_LIST, HtmlMarkup.of( strDocumentHtmlCode ) );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_INSERT_DOCEMENTS, locale, model );
         template.substitute( NewsLetterConstants.WEBAPP_PATH_FOR_LINKSERVICE, strBaseUrl );
