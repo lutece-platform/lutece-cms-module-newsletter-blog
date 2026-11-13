@@ -37,7 +37,7 @@
 	</@columns>
 	<@columns>
 		<#if templates_list?has_content>
-			<@formGroup labelKey='#i18n{module.newsletter.blog.modify_document_topic.templatesList}' labelFor='template_id' helpKey='#i18n{module.newsletter.blog.modify_document_topic.templatesHelp}'>
+			<@fieldSet legend='#i18n{module.newsletter.blog.modify_document_topic.templatesList}' legendClass='form-label' fieldsetParams={'aria-describedby': 'help_template_id'}>
 				<@ul class='list-unstyled'>
 					<#assign nIndex=1>
 					<#assign templateIterator=0>
@@ -47,9 +47,9 @@
 								<#assign templateImage=template_image_list[templateIterator]!>
 								<#assign templateIterator=templateIterator+1>
 								<#if templateImage?? && templateImage != ''>
-									<@img url='data:image/jpeg;base64,${templateImage!}' class='me-1 img-fluid' alt='${template.description}' title='#i18n{newsletter.compose_newsletter.newsletterTemplate}' />
+									<@img url='data:image/jpeg;base64,${templateImage!}' class='me-1 img-fluid' alt='' title='' />
 								<#else>
-									<@img url='${img_path}/${template.pictureKey}' class='me-1 img-fluid' alt='${template.description}' title='#i18n{newsletter.compose_newsletter.newsletterTemplate}' />
+									<@img url='${img_path}/${template.pictureKey}' class='me-1 img-fluid' alt='' title='' />
 								</#if>
 								${template.description}
 							</@radioButton>
@@ -57,7 +57,8 @@
 						<#assign nIndex=nIndex+1>
 					</#list>
 				</@ul>
-			</@formGroup>
+				<@formHelp labelFor='template_id'>#i18n{module.newsletter.blog.modify_document_topic.templatesHelp}</@formHelp>
+			</@fieldSet>
 		<#else>
 			<@empty title='#i18n{newsletter.compose_newsletter.noNewsletterTemplate}' iconName='template-off' />
 		</#if>
