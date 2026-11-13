@@ -73,7 +73,6 @@ import jakarta.inject.Named;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.text.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -257,6 +256,6 @@ public class NewsletterDocumentServiceJspBean extends InsertServiceJspBean imple
 
         String strContent = template.getHtml( );
 
-        return insertUrl( request, strInput, StringEscapeUtils.escapeEcmaScript( strContent ) );
+        return insertUrl( request, strInput, strContent );
     }
 }
