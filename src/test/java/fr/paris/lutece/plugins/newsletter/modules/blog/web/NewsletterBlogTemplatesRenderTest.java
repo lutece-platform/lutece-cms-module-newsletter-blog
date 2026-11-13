@@ -77,6 +77,7 @@ public class NewsletterBlogTemplatesRenderTest
             + "<#macro h rest...><#nested></#macro><#macro formGroup rest...><#nested></#macro><#macro inputGroup rest...><#nested></#macro>"
             + "<#macro inputGroupItem rest...><#nested></#macro><#macro icon rest...></#macro><#macro button rest...></#macro>"
             + "<#macro card rest...><#nested></#macro><#macro empty rest...></#macro><#macro listGroup rest...><#nested></#macro>"
+            + "<#macro fieldSet legend rest...><fieldset><legend>${legend}</legend><#nested></fieldset></#macro>"
             + "<#macro listGroupItem rest...><#nested></#macro><#macro select name rest...><select name=\"${name}\"></select></#macro>"
             + "<#macro input name value='' rest...><input name=\"${name}\" value=\"${value}\"></#macro>"
             + "<#macro checkBox name value labelKey rest...><label><input name=\"${name}\" value=\"${value}\"> ${labelKey}</label></#macro>";
@@ -224,7 +225,7 @@ public class NewsletterBlogTemplatesRenderTest
 
         String strHtml = render( TEMPLATE_MODEL, model );
 
-        assertTrue( strHtml.contains( "alt=\"" + TEXT_ESCAPED + "\"" ), strHtml );
+        assertTrue( strHtml.contains( " " + TEXT_ESCAPED + "</h3>" ), strHtml );
         assertTrue( strHtml.contains( "<td>" + TEXT_ESCAPED + "</td>" ), strHtml );
         assertFalse( strHtml.contains( TEXT_WITH_MARKUP ), strHtml );
         assertTrue( strHtml.contains( "id_file=4321\"" ), strHtml );

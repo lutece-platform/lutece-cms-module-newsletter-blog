@@ -30,22 +30,24 @@
 				<@input type='hidden' name='input' value=.data_model.input! />
 				<@h level=2 class='h5'>#i18n{module.newsletter.blog.select_documents.labelDocumentList}</@h>
 				<#if document_list?has_content>
-					<@listGroup class='lutece-insert-scroll'>
-						<#assign idx=1>
-						<#list document_list as document>
-							<@listGroupItem>
-								<@checkBox name='documents_list' id='document_${document.id!}_${idx}' value='${document.id!}' labelKey='${document.name!} - ${document.updateDate!}' orientation='switch' />
-							</@listGroupItem>
-							<#assign idx=idx+1>
-						</#list>
-					</@listGroup>
+					<@fieldSet legend='#i18n{module.newsletter.blog.select_documents.labelDocumentList}' hideLegend=['all']>
+						<@listGroup class='lutece-insert-scroll'>
+							<#assign idx=1>
+							<#list document_list as document>
+								<@listGroupItem>
+									<@checkBox name='documents_list' id='document_${document.id!}_${idx}' value='${document.id!}' labelKey='${document.name!} - ${document.updateDate!}' orientation='switch' />
+								</@listGroupItem>
+								<#assign idx=idx+1>
+							</#list>
+						</@listGroup>
+					</@fieldSet>
 				<#else>
 					<@card class='text-center p-5'>
 						<@empty title='#i18n{module.newsletter.blog.select_documents.labelDocumentList}' iconName='list-search' />
 					</@card>
 				</#if>
-				<@formGroup labelKey='#i18n{module.newsletter.blog.select_documents.labelDocumentModel}' class='mt-3' mandatory=true>
-					<@select name='template_id' default_value='' items=documents_templates_list />
+				<@formGroup labelFor='template_id' labelKey='#i18n{module.newsletter.blog.select_documents.labelDocumentModel}' class='mt-3' mandatory=true>
+					<@select name='template_id' default_value='' items=documents_templates_list mandatory=true />
 				</@formGroup>
 				<@formGroup>
 					<@button type='submit' title='#i18n{module.newsletter.blog.select_documents.buttonValidate}' color='primary' />
