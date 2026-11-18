@@ -58,6 +58,7 @@ import fr.paris.lutece.util.html.HtmlTemplate;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -69,6 +70,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -110,7 +112,8 @@ public class NewsletterBlogService
         String strTemplatePath = NewsletterUtils.getHtmlTemplatePath( nTemplateId, pluginNewsLetter );
         GregorianCalendar calendar = new java.util.GregorianCalendar( );
         Date dateEndPublishing = new Date( calendar.getTimeInMillis( ) );
-        Date dateStartPublishing = new Date( datePublishing.getTime( ) + 86400000 );
+        // The posts published from the day after the last sending: a post starts its publishing at 00:00 of its day
+        Date dateStartPublishing = new Date( DateUtils.addDays( DateUtils.truncate( datePublishing, Calendar.DAY_OF_MONTH ), 1 ).getTime( ) );
 
         if ( strTemplatePath == null && templateFileKey == null )
         {
