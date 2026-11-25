@@ -111,6 +111,7 @@ public class NewsletterDocumentServiceJspBean extends InsertServiceJspBean imple
     private static final String LABEL_FRAGMENT_COMBO_ALL_DOCUMENT_LIST_ITEM = "module.newsletter.blog.documents.selection.lists.all";
     private static final String MESSAGE_NO_DOCUMENT_TEMPLATE = "module.newsletter.blog.message.noDocumentTemplate";
     private static final String MESSAGE_NO_DOCUMENT_CHOSEN = "module.newsletter.blog.message.noDocumentChosen";
+    private static final String MESSAGE_DOCUMENT_TEMPLATE_MISSING = "module.newsletter.blog.message.documentTemplateMissing";
 
     private static final String CONSTANT_STRING_ZERO = "0";
 
@@ -229,24 +230,18 @@ public class NewsletterDocumentServiceJspBean extends InsertServiceJspBean imple
         Locale locale = AdminUserService.getLocale( request );
 
         String strPathDocumentTemplate = NewsletterUtils.getHtmlTemplatePath( nTemplateId, pluginNewsletter );
-        String templateFileKey = NewsLetterTemplateHome.findByPrimaryKey( nTemplateId, pluginNewsletter ).getFileKey( );
+
+        if ( strPathDocumentTemplate == null )
+        {
+            return AdminMessageService.getMessageUrl( request, MESSAGE_DOCUMENT_TEMPLATE_MISSING, AdminMessage.TYPE_STOP );
+        }
 
         BlogFilter documentFilter = new BlogFilter( );
         documentFilter.setIds( ArrayUtils.toObject( documentsIdList ) );
         List<Blog> blogList = BlogService.getInstance( ).findByFilter( documentFilter );
 
-        String strDocumentHtmlCode;
-        NewsletterBlogService newsletterBlogService = getNewsletterBlogService( );
-        if ( templateFileKey != null && StringUtils.isNumeric( templateFileKey ) )
-        {
-            strDocumentHtmlCode = newsletterBlogService.fillTemplateWithDocumentInfos( Integer.valueOf( templateFileKey ), blogList, locale, strBaseUrl,
-                    AdminUserService.getAdminUser( request ) );
-        }
-        else
-        {
-            strDocumentHtmlCode = newsletterBlogService.fillTemplateWithDocumentInfos( strPathDocumentTemplate, blogList, locale, strBaseUrl,
-                    AdminUserService.getAdminUser( request ) );
-        }
+        String strDocumentHtmlCode = getNewsletterBlogService( ).fillTemplateWithDocumentInfos( strPathDocumentTemplate, blogList, locale, strBaseUrl,
+                AdminUserService.getAdminUser( request ) );
 
         // the list of posts is HTML rendered from the newsletter template
         model.put( MARK_DOCUMENTS_LIST, HtmlMarkup.of( strDocumentHtmlCode ) );
