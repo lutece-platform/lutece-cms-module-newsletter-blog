@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.newsletter.modules.blog.service;
 
+import fr.paris.lutece.plugins.blog.business.Tag;
+import fr.paris.lutece.plugins.blog.business.TagHome;
 import fr.paris.lutece.plugins.blog.business.portlet.BlogListPortletHome;
 import fr.paris.lutece.plugins.blog.service.PublishingService;
 import fr.paris.lutece.plugins.newsletter.business.NewsLetter;
@@ -48,6 +50,7 @@ import fr.paris.lutece.plugins.newsletter.service.topic.INewsletterTopicService;
 import fr.paris.lutece.plugins.newsletter.util.NewsLetterConstants;
 import fr.paris.lutece.plugins.newsletter.util.NewsletterUtils;
 import fr.paris.lutece.portal.business.portlet.Portlet;
+import fr.paris.lutece.portal.business.portlet.PortletHome;
 import fr.paris.lutece.portal.business.portlet.PortletTypeHome;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.i18n.I18nService;
@@ -94,6 +97,13 @@ public class NewsletterBlogTopicService implements INewsletterTopicService
     private static final String LABEL_MODIFY_UNCATEGORIZED_DOCUMENTS = "module.newsletter.blog.modify_document_topic.uncategorizedDocuments.label";
     private static final String LABEL_MODIFY_CATEGORYNOFILTER = "module.newsletter.blog.modify_document_topic.categoryNoFilter.label";
     private static final String MESSAGE_NEWSLETTER_DOCUMENT_TOPIC_TYPE_NAME = "module.newsletter.blog.topicType.name";
+    private static final String LABEL_SUMMARY_TAGS = "module.newsletter.blog.summary.tags";
+    private static final String LABEL_SUMMARY_PORTLETS = "module.newsletter.blog.summary.portlets";
+    private static final String LABEL_SUMMARY_TEMPLATE = "module.newsletter.blog.summary.template";
+
+    private static final String SUMMARY_LABEL_SEPARATOR = " : ";
+    private static final String SUMMARY_LIST_SEPARATOR = ", ";
+    private static final String SUMMARY_PART_SEPARATOR = " \u00b7 ";
 
     private static final String MARK_CATEGORY_LIST = "category_list";
     private static final String MARK_DOCUMENT_LIST_PORTLETS = "document_list_portlets";
@@ -338,6 +348,72 @@ public class NewsletterBlogTopicService implements INewsletterTopicService
         NewsletterBlog newsletterDocument = NewsletterBlogHome.findByPrimaryKey( newsletterTopic.getId( ), getNewsletterDocumentPlugin( ) );
         return getNewsletterBlogService( ).generateDocumentsList( newsletterDocument, newsletterDocument.getIdTemplate( ), newsletter.getDateLastSending( ),
                 fr.paris.lutece.portal.service.util.AppPathService.getProdUrl( "" ), user, locale );
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return The filter of the topic (its tags, or its portlets, or no filter) and its template
+     */
+    @Override
+    public String getConfigurationSummary( NewsletterTopic newsletterTopic, Locale locale )
+    {
+        NewsletterBlog newsletterBlog = NewsletterBlogHome.findByPrimaryKey( newsletterTopic.getId( ), getNewsletterDocumentPlugin( ) );
+        if ( newsletterBlog == null )
+        {
+            return null;
+        }
+
+        List<String> listParts = new ArrayList<>( );
+        List<String> listFilters = new ArrayList<>( );
+        String strFilterLabel;
+        if ( newsletterBlog.getUseDocumentTags( ) )
+        {
+            strFilterLabel = LABEL_SUMMARY_TAGS;
+            for ( int nTagId : NewsletterBlogHome.findNewsletterTagIds( newsletterTopic.getId( ), getNewsletterDocumentPlugin( ) ) )
+            {
+                if ( nTagId == Integer.parseInt( CONSTANT_UNCATEGORIZED_DOCUMENTS_KEY ) )
+                {
+                    listFilters.add( I18nService.getLocalizedString( LABEL_MODIFY_UNCATEGORIZED_DOCUMENTS, locale ) );
+                }
+                else
+                {
+                    Tag tag = TagHome.findByPrimaryKey( nTagId );
+                    if ( tag != null )
+                    {
+                        listFilters.add( tag.getName( ) );
+                    }
+                }
+            }
+        }
+        else
+        {
+            strFilterLabel = LABEL_SUMMARY_PORTLETS;
+            for ( int nPortletId : NewsletterBlogHome.findNewsletterPortletsIds( newsletterTopic.getId( ), getNewsletterDocumentPlugin( ) ) )
+            {
+                Portlet portlet = PortletHome.findByPrimaryKey( nPortletId );
+                if ( portlet != null )
+                {
+                    listFilters.add( portlet.getName( ) );
+                }
+            }
+        }
+        if ( listFilters.isEmpty( ) )
+        {
+            listParts.add( I18nService.getLocalizedString( LABEL_MODIFY_CATEGORYNOFILTER, locale ) );
+        }
+        else
+        {
+            listParts.add( I18nService.getLocalizedString( strFilterLabel, locale ) + SUMMARY_LABEL_SEPARATOR + String.join( SUMMARY_LIST_SEPARATOR, listFilters ) );
+        }
+
+        NewsLetterTemplate template = NewsLetterTemplateHome.findByPrimaryKey( newsletterBlog.getIdTemplate( ), getNewsletterPlugin( ) );
+        if ( template != null )
+        {
+            listParts.add( I18nService.getLocalizedString( LABEL_SUMMARY_TEMPLATE, locale ) + SUMMARY_LABEL_SEPARATOR + template.getDescription( ) );
+        }
+
+        return String.join( SUMMARY_PART_SEPARATOR, listParts );
     }
 
     /**
