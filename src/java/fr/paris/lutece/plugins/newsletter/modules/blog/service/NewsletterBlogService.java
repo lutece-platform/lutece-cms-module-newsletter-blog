@@ -101,21 +101,21 @@ public class NewsletterBlogService
      *            The current admin user
      * @param locale
      *            The locale
-     * @return the html code for the document list of null if no document template available
+     * @return the html code for the document list, or null if the template is unknown or if its file is missing from the folder of the newsletter
+     *         templates
      */
     public String generateDocumentsList( NewsletterBlog newsletterDocument, int nTemplateId, Timestamp datePublishing, String strBaseUrl, AdminUser user,
             Locale locale )
     {
         Plugin pluginNewsLetter = PluginService.getPlugin( NewsletterPlugin.PLUGIN_NAME );
         BlogFilter documentFilter = new BlogFilter( );
-        String templateFileKey = fr.paris.lutece.plugins.newsletter.business.NewsLetterTemplateHome.findByPrimaryKey( nTemplateId, pluginNewsLetter ).getFileKey( );
         String strTemplatePath = NewsletterUtils.getHtmlTemplatePath( nTemplateId, pluginNewsLetter );
         GregorianCalendar calendar = new java.util.GregorianCalendar( );
         Date dateEndPublishing = new Date( calendar.getTimeInMillis( ) );
         // The posts published from the day after the last sending: a post starts its publishing at 00:00 of its day
         Date dateStartPublishing = new Date( DateUtils.addDays( DateUtils.truncate( datePublishing, Calendar.DAY_OF_MONTH ), 1 ).getTime( ) );
 
-        if ( strTemplatePath == null && templateFileKey == null )
+        if ( strTemplatePath == null )
         {
             return null;
         }
@@ -155,16 +155,7 @@ public class NewsletterBlogService
         {
             return StringUtils.EMPTY;
         }
-        String strContent;
-        if ( templateFileKey != null && StringUtils.isNumeric( templateFileKey ) )
-        {
-            strContent = fillTemplateWithDocumentInfos( Integer.parseInt( templateFileKey ), listBlogs, locale, strBaseUrl, user );
-        }
-        else
-        {
-            strContent = fillTemplateWithDocumentInfos( strTemplatePath, listBlogs, locale, strBaseUrl, user );
-        }
-        return strContent;
+        return fillTemplateWithDocumentInfos( strTemplatePath, listBlogs, locale, strBaseUrl, user );
     }
 
     /**
@@ -205,52 +196,6 @@ public class NewsletterBlogService
             model.put( MARK_LIST_BLOG, listBlogAuthorized );
             model.put( NewsLetterConstants.MARK_BASE_URL, strBaseUrl );
             HtmlTemplate template = AppTemplateService.getTemplate( strTemplatePath, locale, model );
-            return template.getHtml( );
-        }
-        return StringUtils.EMPTY;
-    }
-
-    /**
-     * Fills a given document template (from an uploaded file) with the document data.
-     *
-     * @param strTemplateFilekey
-     *            The id of the template file
-     * @param listBlogs
-     *            the object gathering the document data
-     * @param locale
-     *            the locale used to build the template
-     * @param strBaseUrl
-     *            The base url of the portal
-     * @param user
-     *            The current user
-     * @return the html code corresponding to the document data
-     */
-    public String fillTemplateWithDocumentInfos( Integer strTemplateFilekey, Collection<Blog> listBlogs, Locale locale, String strBaseUrl, AdminUser user )
-    {
-        Map<String, Object> model = new HashMap<>( );
-        Collection<Blog> listBlogAuthorized = new ArrayList<>( );
-
-        for ( Blog blog : listBlogs )
-        {
-            Collection<Portlet> porletCollec = PublishingService.getInstance( ).getPortletsByBlogId( Integer.toString( blog.getId( ) ) );
-            porletCollec = _portletService.getAuthorizedPortletCollection( porletCollec, user );
-            if ( porletCollec.size( ) > 0 )
-            {
-                String strProdUrl = AppPathService.getProdUrl( strBaseUrl );
-                model.put( MARK_PROD_URL, strProdUrl );
-                Blog blg = BlogService.getInstance( ).loadBlog( blog.getId( ) );
-                listBlogAuthorized.add( blg );
-            }
-        }
-
-        if ( listBlogAuthorized.size( ) != 0 )
-        {
-            model.put( MARK_LIST_BLOG, listBlogAuthorized );
-            model.put( NewsLetterConstants.MARK_BASE_URL, strBaseUrl );
-            fr.paris.lutece.portal.business.file.File file = fr.paris.lutece.plugins.newsletter.service.NewsletterFileService.getFileByKey( strTemplateFilekey.toString( ) );
-            byte [ ] bTemplate = file.getPhysicalFile( ).getValue( );
-            String strTemplate = new String( bTemplate );
-            HtmlTemplate template = AppTemplateService.getTemplateFromStringFtl( strTemplate, locale, model );
             return template.getHtml( );
         }
         return StringUtils.EMPTY;

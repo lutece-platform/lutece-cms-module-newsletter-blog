@@ -45,7 +45,6 @@ import fr.paris.lutece.plugins.newsletter.modules.blog.business.NewsletterBlogHo
 import fr.paris.lutece.plugins.newsletter.service.NewsletterPlugin;
 import fr.paris.lutece.plugins.newsletter.service.NewsletterService;
 import fr.paris.lutece.plugins.newsletter.service.topic.INewsletterTopicService;
-import fr.paris.lutece.plugins.newsletter.util.NewsLetterConstants;
 import fr.paris.lutece.plugins.newsletter.util.NewsletterUtils;
 import fr.paris.lutece.portal.business.portlet.Portlet;
 import fr.paris.lutece.portal.business.portlet.PortletTypeHome;
@@ -101,6 +100,7 @@ public class NewsletterBlogTopicService implements INewsletterTopicService
     private static final String MARK_TEMPLATES_LIST = "templates_list";
     private static final String MARK_NEWSLETTER_DOCUMENT = "newsletterDocument";
     private static final String MARK_IMG_PATH = "img_path";
+    private static final String MARK_AVAILABLE_PICTURES = "available_pictures";
 
     private static final String TEMPLATE_MODIFY_NEWSLETTER_DOCUMENT_TOPIC_CONFIG = "admin/plugins/newsletter/modules/blog/modify_newsletter_blogs_topic_config.html";
 
@@ -222,29 +222,13 @@ public class NewsletterBlogTopicService implements INewsletterTopicService
                 getNewsletterPlugin( ) );
 
         listTemplates = fr.paris.lutece.portal.service.workgroup.AdminWorkgroupService.getAuthorizedCollection( listTemplates, (fr.paris.lutece.api.user.User) user );
-        List<String> listNewsletterImage = new java.util.ArrayList<>( );
-        for ( int i = 0; i < listTemplates.size( ); i++ )
-        {
-            NewsLetterTemplate newsletterTemplate = (NewsLetterTemplate) listTemplates.toArray( ) [i];
-            String imageFileKey = newsletterTemplate.getPictureKey( );
-            if ( imageFileKey != null && StringUtils.isNumeric( imageFileKey ) )
-            {
-                fr.paris.lutece.portal.business.file.File luteceImageFile = fr.paris.lutece.plugins.newsletter.service.NewsletterFileService
-                        .getFileByKey( newsletterTemplate.getPictureKey( ) );
-                listNewsletterImage.add( java.util.Base64.getEncoder( ).encodeToString( luteceImageFile.getPhysicalFile( ).getValue( ) ) );
-            }
-            else
-            {
-                listNewsletterImage.add( StringUtils.EMPTY );
-            }
-        }
         model.put( MARK_CATEGORY_LIST, listCategoryList );
         model.put( MARK_DOCUMENT_LIST_PORTLETS, listDocumentPortlets );
         model.put( MARK_LIST_PORTLETS_ASSOCIATED_TOPIC, arrayPortletIds );
 
         model.put( MARK_NEWSLETTER_DOCUMENT, newsletterDocument );
         model.put( MARK_TEMPLATES_LIST, listTemplates );
-        model.put( NewsLetterConstants.MARK_TEMPLATE_IMAGE_LIST, listNewsletterImage );
+        model.put( MARK_AVAILABLE_PICTURES, new java.util.ArrayList<>( getNewsletterService( ).getTemplatePictureList( ).toMap( ).keySet( ) ) );
         model.put( MARK_IMG_PATH, strPathImageTemplate );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MODIFY_NEWSLETTER_DOCUMENT_TOPIC_CONFIG, locale, model );
