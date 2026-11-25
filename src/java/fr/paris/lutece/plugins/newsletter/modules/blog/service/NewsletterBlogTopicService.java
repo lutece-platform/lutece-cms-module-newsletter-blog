@@ -276,7 +276,12 @@ public class NewsletterBlogTopicService implements INewsletterTopicService
 
         NewsletterBlogHome.removeNewsLetterDocumentPortlet( newsletterTopic.getId( ), getNewsletterDocumentPlugin( ) );
         String [ ] strPortletsIds = mapParameters.get( PARAMETER_PORTLETS_ID );
-        if ( strPortletsIds != null )
+        if ( strPortletsIds == null || strPortletsIds.length == 0 )
+        {
+            // No portlet chosen: select the blogs by tag, the "no filter" option meaning every published blog
+            useTags = true;
+        }
+        else
         {
             for ( int i = 0; i < strPortletsIds.length; i++ )
             {
