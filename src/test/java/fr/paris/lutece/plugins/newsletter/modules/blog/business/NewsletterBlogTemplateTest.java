@@ -49,7 +49,7 @@ public class NewsletterBlogTemplateTest extends LuteceTestCase
     @Test
     public void testShippedTemplateHasAnIdentifier( )
     {
-        try ( DAOUtil daoUtil = new DAOUtil( "SELECT id_template FROM newsletter_template WHERE template_file_key = 'model_blogs.html'" ) )
+        try ( DAOUtil daoUtil = new DAOUtil( "SELECT id_template FROM newsletter_template WHERE template_name = 'model_blogs.html'" ) )
         {
             daoUtil.executeQuery( );
             assertTrue( "the template is installed", daoUtil.next( ) );
